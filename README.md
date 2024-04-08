@@ -1,0 +1,1 @@
+# SGS.NR.AutoReport
