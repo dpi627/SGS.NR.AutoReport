@@ -2,5 +2,6 @@
 {
     public record DraftCondition
     {
+        public string? ImportPath { get; set; }
     }
 }

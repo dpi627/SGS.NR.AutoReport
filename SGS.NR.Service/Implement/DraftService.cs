@@ -10,7 +10,7 @@ namespace SGS.NR.Service.Implement
         public DraftResultModel Save(DraftInfo info)
         {
             MiniWord.SaveAsByTemplate(
-                info.OutputPath,
+                info.ExportPath,
                 info.TemplatePath,
                 info.Data
                 );
