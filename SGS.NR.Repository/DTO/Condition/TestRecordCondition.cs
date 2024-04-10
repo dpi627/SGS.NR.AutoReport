@@ -1,6 +1,6 @@
 ﻿namespace SGS.NR.Repository.DTO.Condition
 {
-    public record DraftCondition
+    public record TestRecordCondition
     {
         public string? ImportPath { get; set; }
     }

@@ -3,8 +3,8 @@ using SGS.NR.Repository.DTO.DataModel;
 
 namespace SGS.NR.Repository.Interface
 {
-    public interface IDraftRepository
+    public interface ITestRecordRepository
     {
-        public IEnumerable<DraftDataModel> GetDraftData(DraftCondition condition);
+        public IEnumerable<TestRecordDataModel> Read(TestRecordCondition condition);
     }
 }
