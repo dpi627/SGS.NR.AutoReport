@@ -9,11 +9,11 @@ namespace SGS.NR.Service.Implement
     {
         public DraftResultModel Save(DraftInfo info)
         {
-            MiniWord.SaveAsByTemplate(
-                info.ExportPath,
-                info.TemplatePath,
-                info.Data
-                );
+            //MiniWord.SaveAsByTemplate(
+            //    info.ExportPath,
+            //    info.TemplatePath,
+            //    info.Data
+            //    );
             return new DraftResultModel();
         }
     }

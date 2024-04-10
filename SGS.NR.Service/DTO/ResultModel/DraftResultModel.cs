@@ -1,6 +1,6 @@
 ﻿namespace SGS.NR.Service.DTO.ResultModel
 {
-    public record DraftResultModel
+    public record DraftResultModel : BaseResultModel
     {
     }
 }
