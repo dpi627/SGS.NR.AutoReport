@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="MiniWord" Version="0.8.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SGS.NR.Repository\SGS.NR.Repository.csproj" />
+    <ProjectReference Include="..\SGS.NR.Util\SGS.NR.Util.csproj" />
   </ItemGroup>
 
 </Project>
