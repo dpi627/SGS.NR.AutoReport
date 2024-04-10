@@ -5,7 +5,7 @@ namespace SGS.NR.Util.Extension
     /// <summary>
     /// 提供用於處理泛型的擴展方法。
     /// </summary>
-    public static class GenericsExtension
+    public static class GenericTypeExtension
     {
         /// <summary>
         /// 將指定的模型物件轉換為字典。

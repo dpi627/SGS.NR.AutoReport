@@ -3,7 +3,7 @@
     /// <summary>
     /// 提供用於處理可列舉集合的擴展方法。
     /// </summary>
-    public static class EnumerableExtension
+    public static class IEnumerableExtension
     {
         /// <summary>
         /// 將可列舉集合轉換為字典列表。
