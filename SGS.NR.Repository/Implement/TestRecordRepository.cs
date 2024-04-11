@@ -5,7 +5,7 @@ using SGS.NR.Repository.Interface;
 
 namespace SGS.NR.Repository.Implement
 {
-    internal class TestRecordRepository : ITestRecordRepository
+    public class TestRecordRepository : ITestRecordRepository
     {
         /// <summary>
         /// 讀取測試記錄資料
