@@ -7,4 +7,30 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Template\certificate.docx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Template\certificate.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SGS.NR.Repository\SGS.NR.Repository.csproj" />
+    <ProjectReference Include="..\SGS.NR.Service\SGS.NR.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTO\" />
+    <Folder Include="Controller\" />
+    <Folder Include="Mapping\" />
+  </ItemGroup>
+
 </Project>
