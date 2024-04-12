@@ -27,7 +27,5 @@ namespace SGS.NR.AutoReport
                 TemplatePath = @"Template\certificate.docx"
             });
         }
-
-
     }
 }
