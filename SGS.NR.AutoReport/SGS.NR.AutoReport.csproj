@@ -8,6 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controller\**" />
+    <Compile Remove="DTO\**" />
+    <Compile Remove="Mapping\**" />
+    <EmbeddedResource Remove="Controller\**" />
+    <EmbeddedResource Remove="DTO\**" />
+    <EmbeddedResource Remove="Mapping\**" />
+    <None Remove="Controller\**" />
+    <None Remove="DTO\**" />
+    <None Remove="Mapping\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Template\certificate.docx" />
   </ItemGroup>
 
@@ -25,12 +37,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SGS.NR.Repository\SGS.NR.Repository.csproj" />
     <ProjectReference Include="..\SGS.NR.Service\SGS.NR.Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTO\" />
-    <Folder Include="Controller\" />
-    <Folder Include="Mapping\" />
   </ItemGroup>
 
 </Project>
