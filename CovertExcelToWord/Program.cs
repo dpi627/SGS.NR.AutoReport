@@ -11,7 +11,7 @@ namespace CovertExcelToWord
     {
 
         private static List<dynamic>? _rows;
-        private static readonly List<string> _columns = [
+        private static readonly List<string> _subtitles = [
             "GOODS","DESCRIPTION","SHIPMENT","SHIPPER","BUYER","PACKING","MARKS","TIME LOG","INSPECTION","QUANTITY","STOWAGE","REMARKS"
             ];
 
@@ -27,20 +27,78 @@ namespace CovertExcelToWord
             {
                 for (int i = 1; i <= _rows.Count; i++)
                 {
-                    //Console.WriteLine(i);
+                    Console.WriteLine(i);
                     string cellValue = GetValue($"A{i}");
 
                     if (string.IsNullOrWhiteSpace(cellValue))
                         continue;
 
-                    if (_columns.Contains(cellValue.Trim()))
+                    if (_subtitles.Contains(cellValue.Trim()))
                     {
                         Console.WriteLine(cellValue);
                         Console.WriteLine(GetValue($"E{i}"));
 
+                        // INSPECTION 較特殊，要額外多抓一行
                         if (cellValue == "INSPECTION")
                         {
-                            Console.WriteLine(GetValue($"E{i+1}"));
+                            Console.WriteLine(GetValue($"E{i + 1}"));
+                        }
+
+                        // 每種表格處理方式不同，只能分開寫
+                        if (cellValue == "DESCRIPTION" &&
+                            !string.IsNullOrEmpty(GetValue($"E{i + 3}")) &&
+                            !string.IsNullOrEmpty(GetValue($"I{i + 3}")))
+                        {
+                            int j = i + 3;
+                            while (true)
+                            {
+                                Console.WriteLine(j);
+                                if (string.IsNullOrEmpty(GetValue($"E{j}")))
+                                {
+                                    break;
+                                }
+                                Console.WriteLine($"{GetValue($"E{j}")} {GetValue($"I{j}")} {GetValue($"M{j}")} {GetValue($"Q{j}")} {GetValue($"U{j}")}");
+                                j++;
+                            }
+                            //i = j;
+                        }
+
+                        if (cellValue == "INSPECTION" &&
+                            !string.IsNullOrEmpty(GetValue($"E{i + 3}")) &&
+                            !string.IsNullOrEmpty(GetValue($"I{i + 3}")))
+                        {
+                            int j = i + 3;
+                            while (true)
+                            {
+                                Console.WriteLine(j);
+                                if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
+                                    string.IsNullOrEmpty(GetValue($"I{j}")))
+                                {
+                                    break;
+                                }
+                                Console.WriteLine($"{GetValue($"E{j}")} {GetValue($"I{j}")} {GetValue($"U{j}")}");
+                                j++;
+                            }
+                            //i = j;
+                        }
+
+                        if (cellValue == "QUANTITY" &&
+                            !string.IsNullOrEmpty(GetValue($"E{i + 2}")) &&
+                            !string.IsNullOrEmpty(GetValue($"J{i + 2}")))
+                        {
+                            int j = i + 2;
+                            while (true)
+                            {
+                                Console.WriteLine(j);
+                                if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
+                                    string.IsNullOrEmpty(GetValue($"J{j}")))
+                                {
+                                    break;
+                                }
+                                Console.WriteLine($"{GetValue($"E{j}")} {GetValue($"J{j}")} {GetValue($"Q{j}")}");
+                                j++;
+                            }
+                            //i = j;
                         }
                     }
                 }
