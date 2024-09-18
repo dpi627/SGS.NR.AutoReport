@@ -1,35 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.Spreadsheet;
 using MiniExcelLibs;
 
 namespace CovertExcelToWord
 {
     internal class Program
     {
+
+        private static List<dynamic>? _rows;
+        private static readonly List<string> _columns = [
+            "GOODS","DESCRIPTION","SHIPMENT","SHIPPER","BUYER","PACKING","MARKS","TIME LOG","INSPECTION","QUANTITY","STOWAGE","REMARKS"
+            ];
+
         static void Main(string[] args)
         {
             string filePath = @"C:\dev\_tmp\裝櫃電子表單0401.xlsm";
             string sheetName = "草稿"; // 替換成您想讀取的工作表名稱
 
+            // 使用 MiniExcel 讀取所有資料到列表
+            _rows = MiniExcel.Query(filePath, sheetName: sheetName).ToList();
+
             try
             {
-                // 提示使用者輸入儲存格位置
-                Console.Write("請輸入儲存格位置（例如 C10）：");
-                string cellAddress = Console.ReadLine().Trim().ToUpper();
+                for (int i = 1; i <= _rows.Count; i++)
+                {
+                    //Console.WriteLine(i);
+                    string cellValue = GetValue($"A{i}");
 
-                // 解析儲存格位置
-                (int columnNumber, int rowNumber) = ParseCellAddress(cellAddress);
+                    if (string.IsNullOrWhiteSpace(cellValue))
+                        continue;
 
-                // 讀取指定儲存格的值
-                string cellValue = GetCellValue(filePath, sheetName, columnNumber, rowNumber);
+                    if (_columns.Contains(cellValue.Trim()))
+                    {
+                        Console.WriteLine(cellValue);
+                        Console.WriteLine(GetValue($"E{i}"));
 
-                Console.WriteLine($"儲存格 {cellAddress} 的值為： {cellValue}");
+                        if (cellValue == "INSPECTION")
+                        {
+                            Console.WriteLine(GetValue($"E{i+1}"));
+                        }
+                    }
+                }
+
+
+                //while (true)
+                //{
+                //    // 提示使用者輸入儲存格位置
+                //    Console.Write("請輸入儲存格位置（例如 C10）：");
+                //    string cellAddress = Console.ReadLine();
+
+                //    // 讀取指定儲存格的值
+                //    string cellValue = GetValue(cellAddress);
+
+                //    Console.WriteLine($"儲存格 {cellAddress} 的值為： {cellValue}");
+                //}
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"發生錯誤： {ex.Message}");
             }
+        }
+
+        private static string GetValue(string CellAddress)
+        {
+            string cellAddress = CellAddress.ToUpper();
+
+            // 解析儲存格位置
+            (int columnNumber, int rowNumber) = ParseCellAddress(cellAddress);
+
+            // 讀取指定儲存格的值
+            string cellValue = GetCellValue(_rows, columnNumber, rowNumber);
+
+            return cellValue;
         }
 
         /// <summary>
@@ -93,19 +138,17 @@ namespace CovertExcelToWord
         /// <param name="columnNumber">列號</param>
         /// <param name="rowNumber">行號</param>
         /// <returns>儲存格的值</returns>
-        static string GetCellValue(string filePath, string sheetName, int columnNumber, int rowNumber)
+        static string GetCellValue(List<dynamic> rows, int columnNumber, int rowNumber)
         {
             // 使用 MiniExcel 讀取所有資料到列表
-            var rows = MiniExcel.Query(filePath, sheetName: sheetName).ToList();
+            //var _rows = MiniExcel.Query(filePath, sheetName: sheetName).ToList();
 
             // 檢查行號是否在範圍內
             if (rowNumber < 1 || rowNumber > rows.Count)
                 throw new IndexOutOfRangeException("行號超出範圍。");
 
             // 取得目標行
-            var targetRow = rows[rowNumber - 1] as IDictionary<string, object>;
-
-            if (targetRow == null)
+            IDictionary<string, object>? targetRow = rows[rowNumber - 1] as IDictionary<string, object> ??
                 throw new Exception("無法讀取該行資料。");
 
             // 取得所有欄位名稱並排序
