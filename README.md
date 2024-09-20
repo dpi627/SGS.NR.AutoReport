@@ -1,5 +1,15 @@
 # SGS.NR.AutoReport
 
+- [SGS.NR.AutoReport](#sgsnrautoreport)
+- [專案資訊](#專案資訊)
+- [專有名詞](#專有名詞)
+- [C4 Diagram](#c4-diagram)
+  - [Context](#context)
+  - [Container](#container)
+  - [Component](#component)
+  - [Code](#code)
+  - [Deployment](#deployment)
+
 # 專案資訊
 
 | Item          | Description                                                            |
@@ -30,3 +40,25 @@
 - 鋼捲: Steel coil
 - 鋼管: Steel pipe
 - 鋼筯: Steel bar
+
+# C4 Diagram
+
+## Context
+
+![](./assets/SGS.NR.ReportDraftHelper-Context.drawio.svg)
+
+## Container
+
+![](./assets/SGS.NR.ReportDraftHelper-Container.drawio.svg)
+
+## Component
+
+![](./assets/SGS.NR.ReportDraftHelper-Component.drawio.svg)
+
+## Code
+
+(暫無)
+
+## Deployment
+
+![](./assets/SGS.NR.ReportDraftHelper-Deployment.drawio.svg)
