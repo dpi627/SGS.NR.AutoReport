@@ -2,7 +2,6 @@
 using Aspose.Words;
 using CovertExcelToWord.Extensions;
 using CovertExcelToWord.Models;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using System.Data;
 using System.Globalization;
 
@@ -195,7 +194,7 @@ public class Program
     public static void ExportWord(CabinetInstallationModel model, CollectionData cdm)
     {
         // 載入模板文件
-        string templatePath = @"Templates\Draft.Cabinet.Installation.docx";
+        string templatePath = @"Templates\Draft.Container.Loading.docx";
         Document doc = new (templatePath);
 
         // 準備合併資料
@@ -217,7 +216,7 @@ public class Program
         doc.MailMerge.ExecuteWithRegions(ds);
 
         // 保存結果文件
-        string outputPath = @"C:\dev\_tmp\Draft.Cabinet.Installation.docx";
+        string outputPath = @$"C:\dev\_tmp\{DateTime.Now:yyyyMMddHHmmss}.docx";
         doc.Save(outputPath);
 
         Console.WriteLine("模板填充完成！");

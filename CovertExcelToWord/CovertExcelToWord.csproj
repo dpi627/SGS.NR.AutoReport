@@ -9,14 +9,14 @@
 
   <ItemGroup>
     <None Remove="Aspose.Total.655.lic" />
-    <None Remove="Templates\Draft.Cabinet.Installation.docx" />
+    <None Remove="Templates\Draft.Container.Loading.docx" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Aspose.Total.655.lic">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\Draft.Cabinet.Installation.docx">
+    <Content Include="Templates\Draft.Container.Loading.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -24,8 +24,6 @@
   <ItemGroup>
     <PackageReference Include="Aspose.Cells" Version="22.12.0" />
     <PackageReference Include="Aspose.Words" Version="22.12.0" />
-    <PackageReference Include="MiniExcel" Version="1.34.0" />
-    <PackageReference Include="MiniWord" Version="0.8.0" />
   </ItemGroup>
 
 </Project>
