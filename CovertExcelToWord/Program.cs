@@ -1,5 +1,10 @@
 ﻿using Aspose.Cells;
-using DocumentFormat.OpenXml.Drawing.Charts;
+using Aspose.Words;
+using CovertExcelToWord.Extensions;
+using CovertExcelToWord.Models;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using System.Data;
+using System.Globalization;
 
 namespace CovertExcelToWord;
 
@@ -13,8 +18,10 @@ public class Program
 
     static void Main()
     {
-        License license = new();
+        Aspose.Cells.License license = new();
         license.SetLicense("Aspose.Total.655.lic");
+        Aspose.Words.License license1 = new();
+        license1.SetLicense("Aspose.Total.655.lic");
 
         string filePath = @"C:\dev\_tmp\裝櫃電子表單0401.xlsm";
         string sheetName = "草稿"; // 替換成您想讀取的工作表名稱
@@ -28,94 +35,191 @@ public class Program
         //Console.WriteLine(ws.Cells.MaxDataRow);
         //Console.WriteLine(ws.Cells.MaxDisplayRange);
 
-        for(int i=0; i<_ws.Cells.MaxRow; i++)
-        {
-            string valueA = GetValue($"A{i + 1}").Trim();
+        CabinetInstallationModel cbm = new();
+        cbm.HeaderService = GetValue("A2");
+        cbm.HeaderCompany = GetValue("J2");
+        cbm.HeaderNo = GetValue("A3");
+        cbm.ReportTitle = GetValue("A5");
+        cbm.DateLocation = GetValue("A7");
+        cbm.FooterLeft = $"Kaohsiung, {DateTime.Now.ToString("MMMM d, yyyy", new CultureInfo("en-US"))}";
+        cbm.FooterRight = "SGS Far East Ltd., Taiwan";
 
-            if(string.IsNullOrEmpty(valueA) || !_subtitles.Contains(valueA))
+        CollectionData cdm = new();
+
+        for (int i = 1; i <= _ws.Cells.MaxRow; i++)
+        {
+            int j = 0; // 用於計算欄位的偏移量
+            // 取得 A 欄位的值
+            string valueA = GetValue($"A{i}").Trim();
+            // 如果 A 欄位的值為空或不存在 _subtitles，則跳過
+            if (string.IsNullOrEmpty(valueA) || !_subtitles.Contains(valueA))
                 continue;
 
-            Console.WriteLine(GetValue($"A{i + 1}").Trim());
-
-            if (valueA == "TIME LOG")
+            switch (valueA)
             {
-                int j = i + 1;
-                while (true)
-                {
-                    if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
-                    string.IsNullOrEmpty(GetValue($"L{j}")))
-                        break;
-                    Console.WriteLine($"{GetValue($"E{j}")} {GetValue($"L{j}")}");
-                    j++;
-                }
-            }
-            else
-                Console.WriteLine(GetValue($"E{i + 1}"));
-
-            if (valueA == "INSPECTION")
-                Console.WriteLine(GetValue($"E{i + 2}"));
-
-            if (valueA == "DESCRIPTION" && (
-                !string.IsNullOrEmpty(GetValue($"E{i + 4}")) &&
-                !string.IsNullOrEmpty(GetValue($"E{i + 4}"))
-                ))
-            {
-                int j = i + 4;
-                while (true)
-                {
-                    if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
-                    string.IsNullOrEmpty(GetValue($"I{j}")))
-                        break;
-                    Console.WriteLine($"{GetValue($"E{j}")} {GetValue($"I{j}")} {GetValue($"M{j}")} {GetValue($"Q{j}")} {GetValue($"U{j}")} {GetValue($"W{j}")}");
-                    j++;
-                }
-                //i = j;
-            }
-
-            if (valueA == "INSPECTION" && (
-                !string.IsNullOrEmpty(GetValue($"E{i + 4}")) &&
-                !string.IsNullOrEmpty(GetValue($"I{i + 4}"))
-                ))
-            {
-                int j = i + 4;
-                while (true)
-                {
-                    if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
-                    string.IsNullOrEmpty(GetValue($"I{j}")))
-                        break;
-                    Console.WriteLine($"{GetValue($"E{j}")} {GetValue($"I{j}")} {GetValue($"U{j}")}");
-                    j++;
-                }
-                //i = j;
-            }
-
-            if (valueA == "QUANTITY" && (
-                !string.IsNullOrEmpty(GetValue($"E{i + 3}")) &&
-                !string.IsNullOrEmpty(GetValue($"J{i + 3}"))
-                ))
-            {
-                int j = i + 3;
-                while (true)
-                {
-                    if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
-                    string.IsNullOrEmpty(GetValue($"I{j}")))
-                        break;
-                    Console.WriteLine($"{GetValue($"E{j}")} {GetValue($"J{j}")} {GetValue($"Q{j}")}");
-                    j++;
-                }
-                //i = j;
+                case "GOODS":
+                    cbm.Goods = GetValue($"E{i}");
+                    break;
+                case "DESCRIPTION":
+                    cbm.Description = GetValue($"E{i}");
+                    j = i + 4;
+                    if (!string.IsNullOrEmpty(GetValue($"E{j}")) &&
+                    !string.IsNullOrEmpty(GetValue($"E{j}")))
+                    {
+                        while (true)
+                        {
+                            if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
+                            string.IsNullOrEmpty(GetValue($"I{j}")))
+                                break;
+                            cdm.GoodsTable ??= [];
+                            cdm.GoodsTable.Add(new GoodsItem()
+                            {
+                                SONo = GetValue($"E{j}"),
+                                InvoiceNo = GetValue($"I{j}"),
+                                NetWeight = GetValue($"M{j}"),
+                                GrossWeight = GetValue($"Q{j}"),
+                                Quantity = GetValue($"U{j}")
+                            });
+                            j++;
+                        }
+                        if (cdm.GoodsTable.Any())
+                        {
+                            GoodsItem lastItem = cdm.GoodsTable.Last();
+                            cbm.GoodsTotalNetWeight = lastItem.NetWeight;
+                            cbm.GoodsTotalGrossWeight = lastItem.GrossWeight;
+                            cbm.GoodsTotalQuantity = lastItem.Quantity;
+                            cdm.GoodsTable.Remove(lastItem);
+                        }
+                    }
+                    break;
+                case "SHIPMENT":
+                    cbm.Shipment = GetValue($"E{i}");
+                    break;
+                case "SHIPPER":
+                    cbm.Shipper = GetValue($"E{i}");
+                    break;
+                case "BUYER":
+                    cbm.Buyer = GetValue($"E{i}");
+                    break;
+                case "PACKING":
+                    cbm.Packing = GetValue($"E{i}");
+                    break;
+                case "MARKS":
+                    cbm.Marks = GetValue($"E{i}");
+                    break;
+                case "TIME LOG":
+                    j = i;
+                    while (true)
+                    {
+                        if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
+                        string.IsNullOrEmpty(GetValue($"L{j}")))
+                            break;
+                        //Console.WriteLine($"{GetValue($"E{j}")} {GetValue($"L{j}")}");
+                        cdm.TimeLogTable ??= [];
+                        cdm.TimeLogTable.Add(new TimeLogItem()
+                        {
+                            Event = GetValue($"E{j}"),
+                            Data = GetValue($"L{j}")
+                        });
+                        j++;
+                    }
+                    break;
+                case "INSPECTION":
+                    cbm.Inspection1 = GetValue($"E{i}");
+                    cbm.Inspection2 = GetValue($"E{i + 1}");
+                    j = i + 4;
+                    if (!string.IsNullOrEmpty(GetValue($"E{j}")) &&
+                    !string.IsNullOrEmpty(GetValue($"I{j}")))
+                    {
+                        while (true)
+                        {
+                            if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
+                            string.IsNullOrEmpty(GetValue($"I{j}")))
+                                break;
+                            cdm.InspectionTable ??= [];
+                            cdm.InspectionTable.Add(new InspectionItem()
+                            {
+                                CoilNo = GetValue($"E{j}"),
+                                Findings = GetValue($"I{j}"),
+                                PhotoNo = GetValue($"U{j}")
+                            });
+                            j++;
+                        }
+                    }
+                    break;
+                case "QUANTITY":
+                    cbm.Quantity = GetValue($"E{i}");
+                    j = i + 3;
+                    if (!string.IsNullOrEmpty(GetValue($"E{j}")) &&
+                    !string.IsNullOrEmpty(GetValue($"J{j}")))
+                    {
+                        while (true)
+                        {
+                            if (string.IsNullOrEmpty(GetValue($"E{j}")) &&
+                            string.IsNullOrEmpty(GetValue($"I{j}")))
+                                break;
+                            cdm.QuantityTable ??= [];
+                            cdm.QuantityTable.Add(new QuantityItem()
+                            {
+                                ContainerNo = GetValue($"E{j}"),
+                                QuantityLoaded = GetValue($"J{j}"),
+                                ShippingSealNo = GetValue($"Q{j}")
+                            });
+                            j++;
+                        }
+                    }
+                    break;
+                case "STOWAGE":
+                    cbm.Stowage = GetValue($"E{i}");
+                    break;
+                case "REMARKS":
+                    cbm.Remarks = GetValue($"E{i}");
+                    break;
             }
 
 
             Console.WriteLine();
+            Console.WriteLine(cbm);
         }
+
+        ExportWord(cbm, cdm);
     }
 
     public static string GetValue(string cellAddress)
     {
         Cell cell = _ws.Cells[cellAddress];
         return cell.DisplayStringValue ?? "";
-        //object? value = _ws.Cells[cellAddress].Value;
-        //return value == null ? "" : value.ToString() ?? "";
+    }
+
+    //using aspose.word to export word from template with data
+    public static void ExportWord(CabinetInstallationModel model, CollectionData cdm)
+    {
+        // 載入模板文件
+        string templatePath = @"Templates\Draft.Cabinet.Installation.docx";
+        Document doc = new (templatePath);
+
+        // 準備合併資料
+        var data = model.ToDictionary();
+        // 執行郵件合併
+        doc.MailMerge.Execute(data.Keys.ToArray(), data.Values.ToArray());
+
+        DataTable? tableGoods = cdm.GoodsTable.ToDataTable();
+        DataTable? tableTimeLog = cdm.TimeLogTable.ToDataTable();
+        DataTable? tableQuantity = cdm.QuantityTable.ToDataTable();
+        DataTable? tableInspection = cdm.InspectionTable.ToDataTable();
+
+        DataSet ds = new DataSet();
+        ds.Tables.Add(tableGoods);
+        ds.Tables.Add(tableTimeLog);
+        ds.Tables.Add(tableQuantity);
+        ds.Tables.Add(tableInspection);
+
+        doc.MailMerge.ExecuteWithRegions(ds);
+
+        // 保存結果文件
+        string outputPath = @"C:\dev\_tmp\Draft.Cabinet.Installation.docx";
+        doc.Save(outputPath);
+
+        Console.WriteLine("模板填充完成！");
     }
 }
