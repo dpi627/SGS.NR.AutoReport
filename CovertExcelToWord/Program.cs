@@ -1,5 +1,6 @@
 ﻿using Aspose.Cells;
 using Aspose.Words;
+using Aspose.Words.Tables;
 using CovertExcelToWord.Extensions;
 using CovertExcelToWord.Models;
 using System.Data;
@@ -186,7 +187,7 @@ public class Program
 
     public static string GetValue(string cellAddress)
     {
-        Cell cell = _ws.Cells[cellAddress];
+        Aspose.Cells.Cell cell = _ws.Cells[cellAddress];
         return cell.DisplayStringValue ?? "";
     }
 
@@ -215,10 +216,53 @@ public class Program
 
         doc.MailMerge.ExecuteWithRegions(ds);
 
+        // 移除不需要的行
+        //RemoveRowsByBookmark(doc, "GoodsDescription");
+        //RemoveRowsByBookmark(doc, "Inspection");
+        //RemoveRowsByBookmark(doc, "Quantity");
+
         // 保存結果文件
         string outputPath = @$"C:\dev\_tmp\{DateTime.Now:yyyyMMddHHmmss}.docx";
         doc.Save(outputPath);
 
         Console.WriteLine("模板填充完成！");
+    }
+
+    /// <summary>
+    /// 通過書籤名稱移除表格行
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <param name="bookmarkName"></param>
+    public static void RemoveRowsByBookmark(Document doc, string bookmarkName)
+    {
+        // 獲取指定的書籤
+        Bookmark bookmark = doc.Range.Bookmarks[bookmarkName];
+
+        if (bookmark != null)
+        {
+            // 獲取書籤所在的儲存格
+            Aspose.Words.Tables.Cell cell = (Aspose.Words.Tables.Cell)bookmark.BookmarkStart.GetAncestor(NodeType.Cell);
+
+            if (cell != null)
+            {
+                // 獲取儲存格所在的行
+                Aspose.Words.Tables.Row currentRow = cell.ParentRow;
+
+                if (currentRow != null)
+                {
+                    // 獲取下一行
+                    Aspose.Words.Tables.Row nextRow = (Aspose.Words.Tables.Row)currentRow.NextSibling;
+
+                    // 移除當前行
+                    currentRow.Remove();
+
+                    // 如果存在下一行，也將其移除
+                    if (nextRow != null)
+                    {
+                        nextRow.Remove();
+                    }
+                }
+            }
+        }
     }
 }
