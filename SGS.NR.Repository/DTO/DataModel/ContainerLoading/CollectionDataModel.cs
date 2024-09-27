@@ -1,4 +1,6 @@
-﻿namespace SGS.NR.Repository.DTO.DataModel.ContainerLoading;
+﻿#nullable disable
+
+namespace SGS.NR.Repository.DTO.DataModel.ContainerLoading;
 
 public record CollectionDataModel
 {

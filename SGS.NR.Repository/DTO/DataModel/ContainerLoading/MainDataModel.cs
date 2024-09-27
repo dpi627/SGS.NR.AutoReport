@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace SGS.NR.Repository.DTO.DataModel.ContainerLoading;
+﻿namespace SGS.NR.Repository.DTO.DataModel.ContainerLoading;
 
 public record MainDataModel
 {
