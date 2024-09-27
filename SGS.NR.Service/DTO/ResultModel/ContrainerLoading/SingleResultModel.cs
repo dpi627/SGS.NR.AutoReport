@@ -1,8 +1,8 @@
 ﻿#nullable disable
 
-namespace SGS.NR.Repository.DTO.DataModel.ContainerLoading;
+namespace SGS.NR.Service.DTO.ResultModel.ContrainerLoading;
 
-public record SingleDataModel
+public record SingleResultModel
 {
     public string HeaderService { get; set; }
     public string HeaderCompany { get; set; }

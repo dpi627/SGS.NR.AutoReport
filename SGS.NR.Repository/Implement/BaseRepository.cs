@@ -2,9 +2,9 @@
 
 namespace SGS.NR.Repository.Implement;
 
-public class RepositoryBase
+public class BaseRepository
 {
-    public RepositoryBase()
+    public BaseRepository()
     {
         //License license = new();
         //license.SetLicense("Aspose.Total.655.lic");

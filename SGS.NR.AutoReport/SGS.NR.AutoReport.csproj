@@ -20,11 +20,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Template\certificate.docx" />
+    <None Remove="Templates\certificate.docx" />
+    <None Remove="Templates\Draft.Container.Loading.docx" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Template\certificate.docx">
+    <Content Include="Templates\certificate.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Draft.Container.Loading.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -32,6 +36,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="ValueInjecter" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>

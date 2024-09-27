@@ -18,14 +18,24 @@ namespace SGS.NR.AutoReport
             // 建立 ServiceProvider
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-            // 透過 ServiceProvider 取得服務 IDraftService 之實例
-            IDraftService? service = serviceProvider.GetOrCreateService<IDraftService>();
+            //// 透過 ServiceProvider 取得服務 IDraftService 之實例
+            //IDraftService? service = serviceProvider.GetOrCreateService<IDraftService>();
 
-            service.Save(new DraftInfo() {
-                ImportPath = @"C:\Users\Brian_Li\OneDrive - SGS\Test\TestRecord_20240403.xlsx",
-                ExportPath = @"C:\dev\_tmp\output\certificate.docx",
-                TemplatePath = @"Template\certificate.docx"
+            //service.Save(new DraftInfo() {
+            //    ImportPath = @"C:\Users\Brian_Li\OneDrive - SGS\Test\TestRecord_20240403.xlsx",
+            //    ExportPath = @"C:\dev\_tmp\output\certificate.docx",
+            //    TemplatePath = @"Template\certificate.docx"
+            //});
+
+            var service = serviceProvider.GetOrCreateService<IContainerLoadingService>();
+            var result = service.GetDraft(new ContainerLoadingInfo()
+            {
+                SourcePath = @"C:\dev\_tmp\裝櫃電子表單0401.xlsm",
+                TemplatePath = @"Templates\Draft.Container.Loading.docx",
+                TargetPath = @$"C:\dev\_tmp\{DateTime.Now:yyyyMMddHHmmss}.docx"
             });
+
+            Console.WriteLine($"{result}");
         }
     }
 }

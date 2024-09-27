@@ -7,7 +7,7 @@ using SGS.NR.Repository.Extension;
 
 namespace SGS.NR.Repository.Implement;
 
-public class ContainerLoadingRepository : RepositoryBase, IContainerLoadingRepository
+public class ContainerLoadingRepository : BaseRepository, IContainerLoadingRepository
 {
     private Workbook _wb;
     private Worksheet _ws;
@@ -20,7 +20,7 @@ public class ContainerLoadingRepository : RepositoryBase, IContainerLoadingRepos
     public MainDataModel Read(ContainerLoadingCondition condition)
     {
         // 取得 Excel
-        _wb = new(condition.FilePath);
+        _wb = new(condition.SourcePath);
         // 取得工作表
         _ws = _wb.Worksheets[condition.SheetName];
         // 設定一次性或固定資料
