@@ -18,7 +18,6 @@ namespace SGS.NR.AutoReport.Extension
         /// <returns>服務集合</returns>
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddSingleton<IDraftService, DraftService>();
             services.AddSingleton<IContainerLoadingService, ContainerLoadingService>();
             return services;
         }
@@ -30,7 +29,6 @@ namespace SGS.NR.AutoReport.Extension
         /// <returns>服務集合</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddSingleton<ITestRecordRepository, TestRecordRepository>();
             services.AddSingleton<IContainerLoadingRepository, ContainerLoadingRepository>();
             return services;
         }

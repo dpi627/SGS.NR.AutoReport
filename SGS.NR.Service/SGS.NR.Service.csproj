@@ -19,7 +19,6 @@
   <ItemGroup>
     <PackageReference Include="Aspose.Words" Version="22.12.0" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="MiniWord" Version="0.8.0" />
   </ItemGroup>
 
   <ItemGroup>

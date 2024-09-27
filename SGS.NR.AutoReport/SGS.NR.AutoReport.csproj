@@ -20,14 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Templates\certificate.docx" />
     <None Remove="Templates\Draft.Container.Loading.docx" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Templates\certificate.docx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Templates\Draft.Container.Loading.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
