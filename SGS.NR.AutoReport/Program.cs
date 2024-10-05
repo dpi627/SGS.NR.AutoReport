@@ -12,38 +12,37 @@ namespace SGS.NR.AutoReport
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+
+            var builder = Host.CreateApplicationBuilder();
+
+            builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
+                // 載入設定檔 (必須存在，執行期間修改會重載)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                // 載入環境設定檔 (非必要，適合部署人員搭配使用)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true);
+
             // 設定 Serilog
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()  // 設定最低日誌層級
-                .WriteTo.Console()     // 輸出到 Console
-                .WriteTo.File("log/log-.txt", rollingInterval: RollingInterval.Day) // 每天寫入檔案
-                .WriteTo.Seq("http://twtpeoad002:5341/")  // 將日誌寫入到 Seq（請確認 Seq 的 URL）
+                .ReadFrom.Configuration(builder.Configuration) // 讀取設定檔中的日誌設定
                 .CreateLogger();
 
             try
             {
                 Log.Information("應用程式啟動中");
 
-                var builder = Host.CreateApplicationBuilder();
-
+                // 清除預設的日誌提供者
+                builder.Logging.ClearProviders();
                 // 使用 Serilog 取代內建的日誌機制
-                builder.Logging.ClearProviders(); // 清除預設的日誌提供者
                 builder.Logging.AddSerilog();
 
-                builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-                builder.Services.AddOptions<ContainerLoading>().BindConfiguration("appsettings.json");
-
+                // 註冊服務
                 builder.Services.AddServices()
                     .AddRepositories()
                     .AddMiscs();
 
                 var host = builder.Build();
-
-                // 取得 Logger 服務
-                var logger = host.Services.GetRequiredService<ILogger<Program>>();
 
                 // 取得 Configuration 服務
                 var config = host.Services.GetRequiredService<IConfiguration>();
