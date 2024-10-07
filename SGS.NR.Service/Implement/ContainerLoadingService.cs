@@ -1,5 +1,6 @@
 ﻿using Aspose.Words;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 using SGS.NR.Repository.DTO.Condition;
 using SGS.NR.Repository.DTO.DataModel.ContainerLoading;
 using SGS.NR.Repository.Interface;
@@ -12,21 +13,25 @@ using System.Data;
 namespace SGS.NR.Service.Implement;
 
 public class ContainerLoadingService(
+    ILogger<ContainerLoadingService> logger,
     IMapper mapper,
     IContainerLoadingRepository repo
     ) : BaseService, IContainerLoadingService
 {
     public ContainerLoadingResultModel GetDraft(ContainerLoadingInfo info)
     {
+        logger.LogInformation("{MethodName} start with {@Info}", nameof(GetDraft), info);
         var condition = mapper.Map<ContainerLoadingInfo, ContainerLoadingCondition>(info);
         var data = repo.Read(condition);
         var result = Export(info, data);
+        logger.LogInformation("{MethodName} end with {@Result}", nameof(GetDraft), result);
         return result;
     }
 
-    private static ContainerLoadingResultModel Export(ContainerLoadingInfo info, MainDataModel model)
+    private ContainerLoadingResultModel Export(ContainerLoadingInfo info, MainDataModel model)
     {
-        ContainerLoadingResultModel result = new() {
+        ContainerLoadingResultModel result = new()
+        {
             FilePath = info.TargetPath
         };
 
@@ -70,6 +75,7 @@ public class ContainerLoadingService(
         {
             result.IsSuccess = false;
             result.Message = ex.Message;
+            logger.LogError(ex, "Export error");
         }
 
         return result;

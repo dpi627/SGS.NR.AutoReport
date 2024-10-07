@@ -60,9 +60,6 @@ namespace SGS.NR.AutoReport
                 // 呼叫 ContainerLoadingService 服務
                 var result = service.GetDraft(info);
 
-                Log.Information("Export {@info}", info);
-                Log.Information("Create {TargetPath}", Path.GetFileName(info.TargetPath));
-
                 host.Run();
             }
             catch (Exception ex)
