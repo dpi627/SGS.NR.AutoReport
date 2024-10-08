@@ -20,9 +20,9 @@ namespace SGS.NR.AutoReport.Wpf
         protected override async void OnStartup(StartupEventArgs e)
         {
             await _host.StartAsync();
-            base.OnStartup(e);
             var mainWindow = _host.Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
+            base.OnStartup(e);
 
         }
 
