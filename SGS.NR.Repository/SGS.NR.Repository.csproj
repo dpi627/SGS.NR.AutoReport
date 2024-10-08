@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="DTO\DataModel\ContainerUnloading\" />
     <Folder Include="DTO\DataModel\VesselUnloading\" />
-    <Folder Include="DTO\DataModel\VesselLoading\" />
   </ItemGroup>
 
 </Project>
