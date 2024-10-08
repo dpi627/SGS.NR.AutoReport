@@ -30,6 +30,7 @@ namespace SGS.NR.AutoReport.Extension
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddSingleton<IContainerLoadingRepository, ContainerLoadingRepository>();
+            services.AddSingleton<IVesselLoadingRepository, VesselLoadingRepository>();
             return services;
         }
 
