@@ -61,12 +61,17 @@ namespace SGS.NR.AutoReport
                 //// 呼叫 ContainerLoadingService 服務
                 //var result = service.GetDraft(info);
 
-                var repo = host.Services.GetRequiredService<IVesselLoadingRepository>();
-                var result = repo.Read(new Repository.DTO.Condition.VesselLoadingCondition()
+                // 取得 VesselLoading 服務
+                var service = host.Services.GetRequiredService<IVesselLoadingService>();
+                // 建立 Info
+                var info = new VesselLoadingInfo()
                 {
                     SourcePath = @"C:\dev\SGS.NR.AutoReport\Doc\0.BU\裝船電子表單1006.xlsm",
-                    SheetName = "草稿"
-                });
+                    TemplatePath = @"Templates\Draft.Vessel.Loading.docx",
+                    TargetPath = $@"C:\dev\_tmp\DCL{DateTime.Now:yyyyMMddHHmmss}.docx"
+                };
+                // 製作草稿
+                var result = service.GetDraft(info);
 
                 host.Run();
             }

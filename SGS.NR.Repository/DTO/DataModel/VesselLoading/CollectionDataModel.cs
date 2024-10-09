@@ -7,7 +7,7 @@ public record CollectionDataModel
     public List<GoodsItem> GoodsTable { get; set; }
     public List<TimeLogItem> TimeLogTable { get; set; }
     public List<InspectionItem> InspectionTable { get; set; }
-    //public List<QuantityItem> QuantityTable { get; set; }
+    public List<ShipItem> ShipTable { get; set; }
 }
 
 public record GoodsItem
@@ -36,9 +36,8 @@ public record InspectionItem
     public string PhotoNo { get; set; }
 }
 
-//public record QuantityItem
-//{
-//    public string? ContainerNo { get; set; }
-//    public string? QuantityLoaded { get; set; }
-//    public string? ShippingSealNo { get; set; }
-//}
+public record ShipItem
+{
+    public string Event { get; set; }
+    public string Data { get; set; }
+}

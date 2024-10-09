@@ -15,7 +15,7 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
     // 資料讀取時候也必須記得取代 " " 與 "\n"
     private readonly List<string> _subtitles = [
         "GOODS","DESCRIPTION","SHIPMENT","SHIPPER","BUYER","PACKING","MARKS",
-        "GENERAL", "HATCHCOVER", "CORGOHOLD", "GODOWN", "LOADING",
+        "SHIP’SPARTICULAR", "GENERAL", "HATCHCOVER", "CARGOHOLD", "GODOWN", "LOADING",
         "TIMELOG","INSPECTION","QUANTITYLOADED","STOWAGE","REMARKS"
         ];
     private readonly MainDataModel model = new();
@@ -54,14 +54,16 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
         string valueA; //A欄資料
 
 
-        //for (int i = 1; i <= _ws.Cells.MaxRow; i++)
-        //{
-        //    valueA = _ws.GetValue($"A{i}").Replace("\n", "");
-        //    // 如果 A 欄位的值為空或不存在 _subtitles，則跳過
-        //    if (string.IsNullOrEmpty(valueA)) // || !_subtitles.Contains(valueA))
-        //        continue;
-        //    Console.WriteLine(valueA);
-        //}
+        for (int i = 1; i <= _ws.Cells.MaxRow; i++)
+        {
+            valueA = _ws.GetValue($"A{i}")
+                .Replace(" ", "")
+                .Replace("\n", "");
+            // 如果 A 欄位的值為空或不存在 _subtitles，則跳過
+            if (string.IsNullOrEmpty(valueA)) // || !_subtitles.Contains(valueA))
+                continue;
+            Console.WriteLine(valueA);
+        }
 
         for (int i = 1; i <= _ws.Cells.MaxRow; i++)
         {
@@ -102,6 +104,9 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
                     break;
                 case "HATCHCOVER":
                     data.HatchCover = _ws.GetValue($"E{i}");
+                    break;
+                case "CARGOHOLD":
+                    data.CargoHold = _ws.GetValue($"E{i}");
                     break;
                 case "GODOWN":
                     data.GoDown = _ws.GetValue($"E{i}");
@@ -170,6 +175,22 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
                             });
                             j++;
                         }
+                    }
+                    break;
+                case "SHIP’SPARTICULAR":
+                    j = i;
+                    while (true)
+                    {
+                        if (string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
+                        string.IsNullOrEmpty(_ws.GetValue($"P{j}")))
+                            break;
+                        data.ShipTable ??= [];
+                        data.ShipTable.Add(new ShipItem()
+                        {
+                            Event = _ws.GetValue($"E{j}"),
+                            Data = _ws.GetValue($"P{j}")
+                        });
+                        j++;
                     }
                     break;
                 case "TIMELOG":

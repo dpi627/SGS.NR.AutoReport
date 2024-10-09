@@ -4,12 +4,12 @@ using SGS.NR.Service.DTO.Info;
 
 namespace SGS.NR.Service.Mapping;
 
-public class ContainerLoadingMapping : Profile
+public class VesselLoadingMapping : Profile
 {
-    public ContainerLoadingMapping()
+    public VesselLoadingMapping()
     {
         // info > condition
-        CreateMap<ContainerLoadingInfo, ContainerLoadingCondition>()
+        CreateMap<VesselLoadingInfo, VesselLoadingCondition>()
             //.ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => src.FilePath))
             .ReverseMap();
     }
