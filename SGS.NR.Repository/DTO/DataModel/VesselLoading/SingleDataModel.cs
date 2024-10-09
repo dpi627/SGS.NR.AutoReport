@@ -30,7 +30,10 @@ public record SingleDataModel
     public string FooterLeft { get; set; }
     public string FooterRight { get; set; }
 
-    //public string GoodsTotalNetWeight { get; set; }
-    //public string GoodsTotalGrossWeight { get; set; }
-    //public string GoodsTotalQuantity { get; set; }
+    public string GoodsTotalNetWeight { get; set; }
+    public string GoodsTotalNetWeightUnit { get; set; }
+    public string GoodsTotalGrossWeight { get; set; }
+    public string GoodsTotalGrossWeightUnit { get; set; }
+    public string GoodsTotalQuantity { get; set; }
+    public string GoodsTotalQuantityUnit { get; set; }
 }

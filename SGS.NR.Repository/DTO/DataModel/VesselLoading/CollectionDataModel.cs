@@ -16,8 +16,11 @@ public record GoodsItem
     public string SO { get; set; }
     public string LotColour { get; set; }
     public string NetWeight { get; set; }
+    public string NetWeightUnit { get; set; }
     public string GrossWeight { get; set; }
+    public string GrossWeightUnit { get; set; }
     public string Quantity { get; set; }
+    public string QuantityUnit { get; set; }
 }
 
 public record TimeLogItem

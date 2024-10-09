@@ -29,9 +29,9 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
         // 設定一次性或固定資料
         SetSingleData(model.SingleData);
         // 設定集合(迴圈)資料
-        //SetCollectionData(model.CollectionData);
+        SetCollectionData(model.CollectionData);
         // 其他資料處理
-        //OtherDataProcessing();
+        OtherDataProcessing();
 
         return model;
     }
@@ -54,19 +54,21 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
         string valueA; //A欄資料
 
 
-        for (int i = 1; i <= _ws.Cells.MaxRow; i++)
-        {
-            valueA = _ws.GetValue($"A{i}").Replace("\n", "");
-            // 如果 A 欄位的值為空或不存在 _subtitles，則跳過
-            if (string.IsNullOrEmpty(valueA) || !_subtitles.Contains(valueA))
-                continue;
-            Console.WriteLine(valueA);
-        }
+        //for (int i = 1; i <= _ws.Cells.MaxRow; i++)
+        //{
+        //    valueA = _ws.GetValue($"A{i}").Replace("\n", "");
+        //    // 如果 A 欄位的值為空或不存在 _subtitles，則跳過
+        //    if (string.IsNullOrEmpty(valueA)) // || !_subtitles.Contains(valueA))
+        //        continue;
+        //    Console.WriteLine(valueA);
+        //}
 
         for (int i = 1; i <= _ws.Cells.MaxRow; i++)
         {
             // Excel 取出的值必須移除換行符號與空白
-            valueA = _ws.GetValue($"A{i}").Replace(" ", "").Replace("\n", "");
+            valueA = _ws.GetValue($"A{i}")
+                .Replace(" ", "")
+                .Replace("\n", "");
             // 如果 A 欄位的值為空或不存在 _subtitles，則跳過
             if (string.IsNullOrEmpty(valueA) || !_subtitles.Contains(valueA))
                 continue;
@@ -128,121 +130,108 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
     /// <summary>
     /// 設定集合資料
     /// </summary>
-    //private void SetCollectionData(CollectionDataModel data)
-    //{
-    //    for (int i = 1; i <= _ws.Cells.MaxRow; i++)
-    //    {
-    //        int j = 0; // 用於計算欄位的偏移量
-    //        // 取得 A 欄位的值
-    //        string valueA = _ws.GetValue($"A{i}").Trim();
-    //        // 如果 A 欄位的值為空或不存在 _subtitles，則跳過
-    //        if (string.IsNullOrEmpty(valueA) || !_subtitles.Contains(valueA))
-    //            continue;
+    private void SetCollectionData(CollectionDataModel data)
+    {
+        for (int i = 1; i <= _ws.Cells.MaxRow; i++)
+        {
+            int j = 0; // 用於計算欄位的偏移量
+            // 取得 A 欄位的值
+            string valueA = _ws.GetValue($"A{i}")
+                .Replace(" ", "")
+                .Replace("\n", "");
+            // 如果 A 欄位的值為空或不存在 _subtitles，則跳過
+            if (string.IsNullOrEmpty(valueA) || !_subtitles.Contains(valueA))
+                continue;
 
-    //        switch (valueA)
-    //        {
-    //            case "DESCRIPTION":
-    //                j = i + 4;
-    //                if (!string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
-    //                !string.IsNullOrEmpty(_ws.GetValue($"E{j}")))
-    //                {
-    //                    while (true)
-    //                    {
-    //                        if (string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
-    //                        string.IsNullOrEmpty(_ws.GetValue($"I{j}")))
-    //                            break;
-    //                        data.GoodsTable ??= [];
-    //                        data.GoodsTable.Add(new GoodsItem()
-    //                        {
-    //                            SONo = _ws.GetValue($"E{j}"),
-    //                            InvoiceNo = _ws.GetValue($"I{j}"),
-    //                            NetWeight = _ws.GetValue($"M{j}"),
-    //                            GrossWeight = _ws.GetValue($"Q{j}"),
-    //                            Quantity = _ws.GetValue($"U{j}")
-    //                        });
-    //                        j++;
-    //                    }
-    //                }
-    //                break;
-    //            case "TIMELOG":
-    //                j = i;
-    //                while (true)
-    //                {
-    //                    if (string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
-    //                    string.IsNullOrEmpty(_ws.GetValue($"L{j}")))
-    //                        break;
-    //                    //Console.WriteLine($"{GetValue($"E{j}")} {GetValue($"L{j}")}");
-    //                    data.TimeLogTable ??= [];
-    //                    data.TimeLogTable.Add(new TimeLogItem()
-    //                    {
-    //                        Event = _ws.GetValue($"E{j}"),
-    //                        Data = _ws.GetValue($"L{j}")
-    //                    });
-    //                    j++;
-    //                }
-    //                break;
-    //            case "INSPECTION":
-    //                j = i + 4;
-    //                if (!string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
-    //                !string.IsNullOrEmpty(_ws.GetValue($"I{j}")))
-    //                {
-    //                    while (true)
-    //                    {
-    //                        if (string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
-    //                        string.IsNullOrEmpty(_ws.GetValue($"I{j}")))
-    //                            break;
-    //                        data.InspectionTable ??= [];
-    //                        data.InspectionTable.Add(new InspectionItem()
-    //                        {
-    //                            CoilNo = _ws.GetValue($"E{j}"),
-    //                            Findings = _ws.GetValue($"I{j}"),
-    //                            PhotoNo = _ws.GetValue($"U{j}")
-    //                        });
-    //                        j++;
-    //                    }
-    //                }
-    //                break;
-    //            case "QUANTITY":
-    //                j = i + 3;
-    //                if (!string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
-    //                !string.IsNullOrEmpty(_ws.GetValue($"J{j}")))
-    //                {
-    //                    while (true)
-    //                    {
-    //                        if (string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
-    //                        string.IsNullOrEmpty(_ws.GetValue($"I{j}")))
-    //                            break;
-    //                        data.QuantityTable ??= [];
-    //                        data.QuantityTable.Add(new QuantityItem()
-    //                        {
-    //                            ContainerNo = _ws.GetValue($"E{j}"),
-    //                            QuantityLoaded = _ws.GetValue($"J{j}"),
-    //                            ShippingSealNo = _ws.GetValue($"Q{j}")
-    //                        });
-    //                        j++;
-    //                    }
-    //                }
-    //                break;
-    //        }
-    //    }
-    //}
+            switch (valueA)
+            {
+                case "DESCRIPTION":
+                    j = i + 4;
+                    if (!string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
+                    !string.IsNullOrEmpty(_ws.GetValue($"H{j}")))
+                    {
+                        while (true)
+                        {
+                            if (string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
+                            string.IsNullOrEmpty(_ws.GetValue($"H{j}")))
+                                break;
+                            data.GoodsTable ??= [];
+                            data.GoodsTable.Add(new GoodsItem()
+                            {
+                                InvoiceNo = _ws.GetValue($"E{j}"),
+                                SO = _ws.GetValue($"H{j}"),
+                                LotColour = _ws.GetValue($"K{j}"),
+                                NetWeight = _ws.GetValue($"N{j}"),
+                                NetWeightUnit = _ws.GetValue($"P{j}"),
+                                GrossWeight = _ws.GetValue($"Q{j}"),
+                                GrossWeightUnit = _ws.GetValue($"S{j}"),
+                                Quantity = _ws.GetValue($"T{j}"),
+                                QuantityUnit = _ws.GetValue($"U{j}")
+                            });
+                            j++;
+                        }
+                    }
+                    break;
+                case "TIMELOG":
+                    j = i;
+                    while (true)
+                    {
+                        if (string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
+                        string.IsNullOrEmpty(_ws.GetValue($"M{j}")))
+                            break;
+                        data.TimeLogTable ??= [];
+                        data.TimeLogTable.Add(new TimeLogItem()
+                        {
+                            Event = _ws.GetValue($"E{j}"),
+                            Data = _ws.GetValue($"M{j}")
+                        });
+                        j++;
+                    }
+                    break;
+                case "INSPECTION":
+                    j = i + 3;
+                    if (!string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
+                    !string.IsNullOrEmpty(_ws.GetValue($"I{j}")))
+                    {
+                        while (true)
+                        {
+                            if (string.IsNullOrEmpty(_ws.GetValue($"E{j}")) &&
+                            string.IsNullOrEmpty(_ws.GetValue($"I{j}")))
+                                break;
+                            data.InspectionTable ??= [];
+                            data.InspectionTable.Add(new InspectionItem()
+                            {
+                                CoilNo = _ws.GetValue($"E{j}"),
+                                Findings = _ws.GetValue($"I{j}"),
+                                PhotoNo = _ws.GetValue($"U{j}")
+                            });
+                            j++;
+                        }
+                    }
+                    break;
+            }
+        }
+    }
 
     /// <summary>
     /// 其他資料處理
     /// </summary>
-    //public void OtherDataProcessing()
-    //{
-    //    // 如果 GoodsTable 有資料
-    //    if (model.CollectionData.GoodsTable.Count != 0)
-    //    {
-    //        // 取出最後一筆資料
-    //        GoodsItem lastItem = model.CollectionData.GoodsTable.Last();
-    //        // 設定一次性資料欄位 NetWeight、GrossWeight、Quantity
-    //        model.SingleData.GoodsTotalNetWeight = lastItem.NetWeight;
-    //        model.SingleData.GoodsTotalGrossWeight = lastItem.GrossWeight;
-    //        model.SingleData.GoodsTotalQuantity = lastItem.Quantity;
-    //        // 設定完成後移除
-    //        model.CollectionData.GoodsTable.Remove(lastItem);
-    //    }
-    //}
+    public void OtherDataProcessing()
+    {
+        // 如果 GoodsTable 有資料
+        if (model.CollectionData.GoodsTable.Count != 0)
+        {
+            // 取出最後一筆資料
+            GoodsItem lastItem = model.CollectionData.GoodsTable.Last();
+            // 設定一次性資料欄位 NetWeight、GrossWeight、Quantity
+            model.SingleData.GoodsTotalNetWeight = lastItem.NetWeight;
+            model.SingleData.GoodsTotalNetWeightUnit = lastItem.NetWeightUnit;
+            model.SingleData.GoodsTotalGrossWeight = lastItem.GrossWeight;
+            model.SingleData.GoodsTotalGrossWeightUnit = lastItem.GrossWeightUnit;
+            model.SingleData.GoodsTotalQuantity = lastItem.Quantity;
+            model.SingleData.GoodsTotalQuantityUnit = lastItem.QuantityUnit;
+            // 設定完成後移除
+            model.CollectionData.GoodsTable.Remove(lastItem);
+        }
+    }
 }
