@@ -1,5 +1,5 @@
 ﻿using Aspose.Words;
-using AutoMapper;
+using MapsterMapper;
 using Microsoft.Extensions.Logging;
 using SGS.NR.Repository.DTO.Condition;
 using SGS.NR.Repository.DTO.DataModel.ContainerLoading;
@@ -21,7 +21,7 @@ public class ContainerLoadingService(
     public ContainerLoadingResultModel GetDraft(ContainerLoadingInfo info)
     {
         logger.LogInformation("{MethodName} start with {@Info}", nameof(GetDraft), info);
-        var condition = mapper.Map<ContainerLoadingInfo, ContainerLoadingCondition>(info);
+        var condition = mapper.Map<ContainerLoadingCondition>(info);
         var data = repo.Read(condition);
         var result = Export(info, data);
         logger.LogInformation("{MethodName} end with {@Result}", nameof(GetDraft), result);

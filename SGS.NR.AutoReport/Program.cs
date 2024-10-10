@@ -3,9 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using SGS.NR.AutoReport.DTOs;
 using SGS.NR.AutoReport.Extension;
-using SGS.NR.Repository.Interface;
 using SGS.NR.Service.DTO.Info;
 using SGS.NR.Service.Interface;
 
@@ -47,19 +45,19 @@ namespace SGS.NR.AutoReport
 
                 // 取得 Configuration 服務
                 //var config = host.Services.GetRequiredService<IConfiguration>();
-                //// 讀取特定 section 並轉換為強型別
+                // 讀取特定 section 並轉換為強型別
                 //var containerLoading = config.GetSection("ContainerLoading").Get<ContainerLoading>();
-                //// 取得 ContainerLoading 服務
-                //var service = host.Services.GetRequiredService<IContainerLoadingService>();
-                //// 建立 ContainerLoadingInfo 物件
-                //var info = new ContainerLoadingInfo()
-                //{
-                //    SourcePath = containerLoading.SourcePath,
-                //    TemplatePath = containerLoading.TemplatePath,
-                //    TargetPath = string.Format(containerLoading.TargetPath, DateTime.Now.ToString("yyyyMMddHHmmss"))
-                //};
-                //// 呼叫 ContainerLoadingService 服務
-                //var result = service.GetDraft(info);
+                // 取得 ContainerLoading 服務
+                var serviceCL = host.Services.GetRequiredService<IContainerLoadingService>();
+                // 建立 ContainerLoadingInfo 物件
+                var infoCL = new ContainerLoadingInfo()
+                {
+                    SourcePath = @"C:\dev\SGS.NR.AutoReport\Doc\0.BU\裝櫃電子表單1006.xlsm",
+                    TemplatePath = @"Templates\Draft.Container.Loading.docx",
+                    TargetPath = $@"C:\dev\_tmp\DCL{DateTime.Now:yyyyMMddHHmmss}.docx"
+                };
+                // 呼叫 ContainerLoadingService 服務
+                var resultCL = serviceCL.GetDraft(infoCL);
 
                 // 取得 VesselLoading 服務
                 var service = host.Services.GetRequiredService<IVesselLoadingService>();
@@ -68,12 +66,12 @@ namespace SGS.NR.AutoReport
                 {
                     SourcePath = @"C:\dev\SGS.NR.AutoReport\Doc\0.BU\裝船電子表單1006.xlsm",
                     TemplatePath = @"Templates\Draft.Vessel.Loading.docx",
-                    TargetPath = $@"C:\dev\_tmp\DCL{DateTime.Now:yyyyMMddHHmmss}.docx"
+                    TargetPath = $@"C:\dev\_tmp\DVL{DateTime.Now:yyyyMMddHHmmss}.docx"
                 };
                 // 製作草稿
                 var result = service.GetDraft(info);
 
-                host.Run();
+                //host.Run(); // 這個方法會一直等待，直到應用程式結束 (非 hosting service 可不用執行)
             }
             catch (Exception ex)
             {

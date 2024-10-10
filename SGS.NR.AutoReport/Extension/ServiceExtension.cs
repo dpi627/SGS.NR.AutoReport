@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Mapster;
+using MapsterMapper;
+using Microsoft.Extensions.DependencyInjection;
 using SGS.NR.Repository.Implement;
 using SGS.NR.Repository.Interface;
 using SGS.NR.Service.Implement;
@@ -42,7 +44,10 @@ namespace SGS.NR.AutoReport.Extension
         /// <returns>服務集合</returns>
         public static IServiceCollection AddMiscs(this IServiceCollection services)
         {
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            var config = new TypeAdapterConfig();
+            services.AddSingleton(config);
+            services.AddScoped<IMapper, ServiceMapper>();
+
             return services;
         }
 
