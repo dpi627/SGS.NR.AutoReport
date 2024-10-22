@@ -15,7 +15,7 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
     // 資料讀取時候也必須記得取代 " " 與 "\n"
     private readonly List<string> _subtitles = [
         "GOODS","DESCRIPTION","SHIPMENT","SHIPPER","BUYER","PACKING","MARKS",
-        "SHIP’SPARTICULAR", "GENERAL", "HATCHCOVER", "CARGOHOLD", "GODOWN", "LOADING",
+        "SHIP'SPARTICULAR", "GENERAL", "HATCHCOVER", "CARGOHOLD", "GODOWN", "LOADING",
         "TIMELOG","INSPECTION","QUANTITYLOADED","STOWAGE","REMARKS"
         ];
     private readonly MainDataModel model = new();
@@ -177,7 +177,7 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
                         }
                     }
                     break;
-                case "SHIP’SPARTICULAR":
+                case "SHIP'SPARTICULAR":
                     j = i;
                     while (true)
                     {
