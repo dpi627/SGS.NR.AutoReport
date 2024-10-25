@@ -65,7 +65,7 @@ namespace SGS.NR.AutoReport
                 var info = new VesselLoadingInfo()
                 {
                     SourcePath = @"C:\dev\SGS.NR.AutoReport\Doc\0.BU\裝船電子表單1006.xlsm",
-                    TemplatePath = @"Templates\Draft.Vessel.Loading.docx",
+                    TemplatePath = @"Templates\Draft.Vessel.Load.docx",
                     TargetPath = $@"C:\dev\_tmp\DVL{DateTime.Now:yyyyMMddHHmmss}.docx"
                 };
                 // 製作草稿
