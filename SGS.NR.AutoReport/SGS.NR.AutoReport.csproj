@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Remove="Templates\Draft.Container.Loading.docx" />
+    <None Remove="Templates\Draft.Container.Load.docx" />
     <None Remove="Templates\Draft.Vessel.Load.docx" />
   </ItemGroup>
 
@@ -32,7 +32,7 @@
     <Content Include="Templates\Draft.Vessel.Load.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\Draft.Container.Loading.docx">
+    <Content Include="Templates\Draft.Container.Load.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

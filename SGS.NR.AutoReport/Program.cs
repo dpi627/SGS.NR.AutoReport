@@ -53,7 +53,7 @@ namespace SGS.NR.AutoReport
                 var infoCL = new ContainerLoadingInfo()
                 {
                     SourcePath = @"C:\dev\SGS.NR.AutoReport\Doc\0.BU\裝櫃電子表單1006.xlsm",
-                    TemplatePath = @"Templates\Draft.Container.Loading.docx",
+                    TemplatePath = @"Templates\Draft.Container.Load.docx",
                     TargetPath = $@"C:\dev\_tmp\DCL{DateTime.Now:yyyyMMddHHmmss}.docx"
                 };
                 // 呼叫 ContainerLoadingService 服務

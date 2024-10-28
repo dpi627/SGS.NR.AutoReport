@@ -195,7 +195,7 @@ public class Program
     public static void ExportWord(CabinetInstallationModel model, CollectionData cdm)
     {
         // 載入模板文件
-        string templatePath = @"Templates\Draft.Container.Loading.docx";
+        string templatePath = @"Templates\Draft.Container.Load.docx";
         Document doc = new (templatePath);
 
         // 準備合併資料
