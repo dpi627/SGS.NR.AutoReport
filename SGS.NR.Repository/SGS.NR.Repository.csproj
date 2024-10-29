@@ -22,8 +22,6 @@
 
   <ItemGroup>
     <Folder Include="DTO\DataModel\ContainerUnload\" />
-    <Folder Include="DTO\DataModel\VesselUnload24305257\" />
-    <Folder Include="DTO\DataModel\VesselUnload24304166\" />
   </ItemGroup>
 
 </Project>
