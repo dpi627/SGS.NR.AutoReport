@@ -6,7 +6,7 @@ public record CollectionDataModel
 {
     public List<GoodsItem> GoodsTable { get; set; }
     public List<TimeLogItem> TimeLogTable { get; set; }
-    public List<QuantityDelivered> ShipTable { get; set; }
+    public List<QuantityDelivered> QuantityTable { get; set; }
 }
 
 public record GoodsItem

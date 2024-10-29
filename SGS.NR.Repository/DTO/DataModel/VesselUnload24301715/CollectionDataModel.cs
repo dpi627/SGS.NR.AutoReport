@@ -6,7 +6,7 @@ public record CollectionDataModel
 {
     public List<GoodsItem> GoodsTable { get; set; }
     public List<TimeLogItem> TimeLogTable { get; set; }
-    public List<QuantityDelivered> ShipTable { get; set; }
+    //public List<QuantityDelivered> QuantityTable { get; set; }
 }
 
 public record GoodsItem
@@ -28,8 +28,8 @@ public record TimeLogItem
     public string Data { get; set; }
 }
 
-public record QuantityDelivered
-{
-    public string Event { get; set; }
-    public string Data { get; set; }
-}
+//public record QuantityDelivered
+//{
+//    public string Event { get; set; }
+//    public string Data { get; set; }
+//}
