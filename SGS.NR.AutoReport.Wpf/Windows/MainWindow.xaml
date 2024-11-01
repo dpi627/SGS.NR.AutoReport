@@ -3,10 +3,99 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SGS.NR.AutoReport.Wpf"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:SGS.NR.AutoReport.Wpf.ViewModels"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="640" Width="480">
-    <Grid>
+        Style="{StaticResource MaterialDesignWindow}"
+        Title="{Binding WindowTitle}"
+        Height="600"
+        Width="460"
+        MinHeight="600"
+        MinWidth="460">
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-    </Grid>
+            <materialDesign:ColorZone Mode="PrimaryMid" Padding="16">
+                <DockPanel>
+                    <ToggleButton x:Name="MenuToggleButton"
+                        Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                        IsChecked="{Binding IsLeftDrawerOpen}"
+                        DockPanel.Dock="Left"/>
+                    <TextBlock HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                               Margin="20,0,0,0"
+                        Text="食品實驗室標籤列印"
+                        FontSize="22"/>
+                </DockPanel>
+            </materialDesign:ColorZone>
+
+            <materialDesign:DrawerHost x:Name="DrawerHost"
+                                   IsLeftDrawerOpen="{Binding IsLeftDrawerOpen}"
+                                   Grid.Row="1">
+                <materialDesign:DrawerHost.LeftDrawerContent>
+                    <StackPanel Width="220">
+                        <Button FontSize="16"
+                                Height="60"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Command="{Binding NavigateToLabelPrintAsyncCommand}"
+                                HorizontalContentAlignment="Left"
+                                Width="Auto">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Printer"
+                                         Width="28"
+                                         Height="28"
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,16,0"/>
+                                <TextBlock Text="標籤列印"
+                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button FontSize="16"
+                                Height="50"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Command="{Binding NavigateToExcelConfigAsyncCommand}"
+                                HorizontalContentAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="FileExcel"
+                                         Width="28"
+                                         Height="28"
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,16,0"/>
+                                <TextBlock Text="Excel設定檔"
+                                    VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </materialDesign:DrawerHost.LeftDrawerContent>
+
+                <Grid>
+                    <Frame x:Name="MainFrame" Content="{Binding CurrentPage}" NavigationUIVisibility="Hidden"/>
+                    <materialDesign:Card UniformCornerRadius="14"
+                         Padding="10"
+                         materialDesign:ElevationAssist.Elevation="Dp4"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                         Value="0"
+                         IsIndeterminate="True"
+                         Width="50"
+                         Height="50"/>
+                            <TextBlock Text="Loading..."
+                       HorizontalAlignment="Center"
+                       Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </Grid>
+
+            </materialDesign:DrawerHost>
+
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>

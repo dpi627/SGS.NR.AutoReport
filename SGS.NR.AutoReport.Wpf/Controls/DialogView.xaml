@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="SGS.NR.AutoReport.Wpf.Controls.DialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:SGS.NR.AutoReport.Wpf.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:DialogViewModel}"
+             MinWidth="250" MinHeight="150">
+    <Grid Margin="10, 20, 10, 30">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="90*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <materialDesign:PackIcon Kind="AlertOctagram"
+            Width="60"
+            Height="60"
+            Foreground="{StaticResource MaterialDesign.Brush.Primary}"
+            HorizontalAlignment="Center"
+            Grid.Column="1"
+            Grid.Row="1"/>
+
+        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Value="{Binding CountdownProgress}"
+                     HorizontalAlignment="Right"
+                     IsIndeterminate="False"
+                     Grid.Column="1" Grid.Row="0"
+                     Width="20" Height="20"
+                     Visibility="{Binding IsAutoClose, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <TextBlock Text="{Binding Message}"
+                   HorizontalAlignment="Center"
+            TextWrapping="Wrap"
+            FontSize="16"
+            Grid.Column="1"
+            Grid.Row="2"
+            Margin="24">
+        </TextBlock>
+
+        <StackPanel Grid.Column="1"
+                    Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Button Content="{Binding OkButtonText}"
+                FontSize="16"
+                Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                Command="{Binding OkCommand}"
+                Width="{StaticResource ButtonWidth}"
+                Visibility="{Binding IsOkButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Content="{Binding CancelButtonText}"
+                FontSize="16"
+                Margin="10,0,0,0"
+                Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                Command="{Binding CancelCommand}"
+                Width="{StaticResource ButtonWidth}"
+                Visibility="{Binding IsCancelButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </StackPanel>
+
+    </Grid>
+</UserControl>
