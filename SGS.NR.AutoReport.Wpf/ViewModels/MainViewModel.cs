@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.Util.Helper;
 using System.Windows.Controls;
 
@@ -20,14 +22,22 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string? _windowTitle;
 
+    [ObservableProperty]
+    private string? _appTitle;
+
+    private readonly AppSettings _appSettings;
+
     public IAsyncRelayCommand NavigateToLabelPrintAsyncCommand { get; }
     public IAsyncRelayCommand NavigateToExcelConfigAsyncCommand { get; }
 
-    public MainViewModel()
+    public MainViewModel(IOptions<AppSettings> appSettings)
     {
+        _appSettings = appSettings.Value;
+
         NavigateToLabelPrintAsyncCommand = new AsyncRelayCommand(NavigateToLabelPrintAsync);
         NavigateToExcelConfigAsyncCommand = new AsyncRelayCommand(NavigateToExcelConfigAsync);
         WindowTitle = $"{AppDomain.CurrentDomain.FriendlyName} - {VersionHelper.CurrentVersion}";
+        AppTitle = _appSettings.AppTitle;
 
         Task.Run(() => NavigateToLabelPrintAsync());
     }

@@ -8,7 +8,7 @@ using SGS.NR.AutoReport.Wpf.ViewModels;
 using System.IO;
 using System.Windows;
 using SGS.NR.Util.Helper;
-using SGS.NR.Util.Extension;
+using SGS.NR.AutoReport.Wpf.Models;
 
 namespace SGS.NR.AutoReport.Wpf
 {
@@ -41,14 +41,16 @@ namespace SGS.NR.AutoReport.Wpf
                 // 使用 Serilog 取代內建的日誌機制
                 builder.Logging.AddSerilog();
 
+                builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(nameof(AppSettings)));
+
+                builder.Services.AddSingleton<IDialogService, DialogService>();
+
+                builder.Services.AddSingleton<MainViewModel>();
+
                 builder.Services.AddSingleton(p => new MainWindow
                 {
                     DataContext = p.GetRequiredService<MainViewModel>()
                 });
-
-                builder.Services.AddSingleton<MainViewModel>();
-
-                builder.Services.AddSingleton<IDialogService, DialogService>();
 
                 _host = builder.Build();
 
