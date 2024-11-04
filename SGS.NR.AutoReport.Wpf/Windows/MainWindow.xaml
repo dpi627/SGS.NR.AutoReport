@@ -42,16 +42,16 @@
                         <Button FontSize="16"
                                 Height="60"
                                 Style="{StaticResource MaterialDesignFlatButton}"
-                                Command="{Binding NavigateToLabelPrintAsyncCommand}"
+                                Command="{Binding NavigateToExportDraftAsyncCommand}"
                                 HorizontalContentAlignment="Left"
                                 Width="Auto">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Printer"
+                                <materialDesign:PackIcon Kind="Export"
                                          Width="28"
                                          Height="28"
                                          VerticalAlignment="Center"
                                          Margin="0,0,16,0"/>
-                                <TextBlock Text="標籤列印"
+                                <TextBlock Text="報告草稿匯出"
                            VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
@@ -61,12 +61,12 @@
                                 Command="{Binding NavigateToExcelConfigAsyncCommand}"
                                 HorizontalContentAlignment="Left">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="FileExcel"
+                                <materialDesign:PackIcon Kind="FileWord"
                                          Width="28"
                                          Height="28"
                                          VerticalAlignment="Center"
                                          Margin="0,0,16,0"/>
-                                <TextBlock Text="Excel設定檔"
+                                <TextBlock Text="草稿範本維護"
                                     VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>

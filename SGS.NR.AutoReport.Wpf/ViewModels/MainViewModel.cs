@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SGS.NR.AutoReport.Wpf.Models;
+using SGS.NR.AutoReport.Wpf.Pages;
 using SGS.NR.Util.Helper;
 using System.Windows.Controls;
 
@@ -27,25 +28,25 @@ public partial class MainViewModel : ObservableObject
 
     private readonly AppSettings _appSettings;
 
-    public IAsyncRelayCommand NavigateToLabelPrintAsyncCommand { get; }
+    public IAsyncRelayCommand NavigateToExportDraftAsyncCommand { get; }
     public IAsyncRelayCommand NavigateToExcelConfigAsyncCommand { get; }
 
     public MainViewModel(IOptions<AppSettings> appSettings)
     {
         _appSettings = appSettings.Value;
 
-        NavigateToLabelPrintAsyncCommand = new AsyncRelayCommand(NavigateToLabelPrintAsync);
+        NavigateToExportDraftAsyncCommand = new AsyncRelayCommand(NavigateToExportDraftAsync);
         NavigateToExcelConfigAsyncCommand = new AsyncRelayCommand(NavigateToExcelConfigAsync);
         WindowTitle = $"{AppDomain.CurrentDomain.FriendlyName} - {VersionHelper.CurrentVersion}";
         AppTitle = _appSettings.AppTitle;
 
-        Task.Run(() => NavigateToLabelPrintAsync());
+        Task.Run(() => NavigateToExportDraftAsync());
     }
 
     [RelayCommand]
-    private void NavigateToLabelPrint()
+    private void NavigateToExportDraft()
     {
-        //CurrentPage = App.AppHost!.Services.GetRequiredService<LabelPrintPage>();
+        CurrentPage = App.Host.Services.GetRequiredService<ExportDraftPage>();
         CloseLeftDrawer();
     }
 
@@ -61,9 +62,9 @@ public partial class MainViewModel : ObservableObject
         IsLeftDrawerOpen = false;
     }
 
-    private async Task NavigateToLabelPrintAsync()
+    private async Task NavigateToExportDraftAsync()
     {
-        //await NavigateToPageAsync<LabelPrintPage>();
+        await NavigateToPageAsync<ExportDraftPage>();
     }
 
     private async Task NavigateToExcelConfigAsync()

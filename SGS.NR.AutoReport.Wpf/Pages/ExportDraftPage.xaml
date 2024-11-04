@@ -1,0 +1,92 @@
+﻿<Page x:Class="SGS.NR.AutoReport.Wpf.Pages.ExportDraftPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:SGS.NR.AutoReport.Wpf.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:vm="clr-namespace:SGS.NR.AutoReport.Wpf.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:ExportDraftViewModel}"
+    mc:Ignorable="d"
+    d:DesignHeight="600" d:DesignWidth="400" d:Background="#FFF"
+    Title="LabelPrintPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Button
+            Content="Import Excel"
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalAlignment="Left"
+            Margin="10"
+            Command="{Binding PrintLabelCommand}"
+            IsEnabled="{Binding IsPrintButtonEnabled}"
+            Style="{StaticResource MaterialDesignRaisedButton}"
+            materialDesign:ButtonAssist.CornerRadius="5"/>
+
+        <DataGrid ItemsSource="{Binding ExcelFiles}"
+            SelectedItem="{Binding SelectedFile}"
+                  Grid.Row="1"
+                    Grid.Column="0"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            SelectionMode="Single"
+            SelectionUnit="FullRow">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="File Name"
+            Binding="{Binding ConfigName}"
+            Width="*"/>
+                <DataGridTextColumn Header="File Path"
+            Binding="{Binding ConfigPath}"
+            Width="2*"
+            Visibility="Hidden"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <ComboBox x:Name="cbbPrinter"
+    Grid.Column="0"
+    Grid.Row="2"
+    Width="Auto"
+    Margin="10"
+    ItemsSource="{Binding Printers}"
+    SelectedItem="{Binding SelectedPrinter, Mode=TwoWay}"
+    Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+
+        <StackPanel Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="10">
+            <ToggleButton IsChecked="{Binding IsAutoPrint, Mode=TwoWay}"
+                    Command="{Binding TogglePrintButtonCommand}"
+                    CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                    Style="{StaticResource MaterialDesignSwitchToggleButton}">
+            </ToggleButton>
+            <TextBlock VerticalAlignment="Center"
+                Margin="5,0,0,0"
+                FontSize="14"
+                Text="Signature"/>
+        </StackPanel>
+
+        <Button
+            Content="Export Word"
+            Grid.Row="3"
+            Grid.Column="0"
+            HorizontalAlignment="Right"
+            Margin="10"
+            Command="{Binding PrintLabelCommand}"
+            IsEnabled="{Binding IsPrintButtonEnabled}"
+            Style="{StaticResource MaterialDesignRaisedButton}"
+            materialDesign:ButtonAssist.CornerRadius="5"/>
+
+    </Grid>
+</Page>

@@ -15,7 +15,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <System:Double x:Key="ButtonWidth">90</System:Double>
+            <!--<System:Double x:Key="ButtonWidth">90</System:Double>-->
             <System:Double x:Key="IconSize">25</System:Double>
         </ResourceDictionary>
     </Application.Resources>

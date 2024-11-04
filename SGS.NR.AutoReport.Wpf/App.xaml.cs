@@ -9,16 +9,17 @@ using System.IO;
 using System.Windows;
 using SGS.NR.Util.Helper;
 using SGS.NR.AutoReport.Wpf.Models;
+using SGS.NR.AutoReport.Wpf.Pages;
 
 namespace SGS.NR.AutoReport.Wpf
 {
     public partial class App : Application
     {
-        private readonly IHost _host;
+        public static IHost Host;
 
         public App()
         {
-            var builder = Host.CreateApplicationBuilder();
+            var builder = Microsoft.Extensions.Hosting.Host.CreateApplicationBuilder();
 
             builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
                 // 載入設定檔 (必須存在，執行期間修改會重載)
@@ -41,18 +42,27 @@ namespace SGS.NR.AutoReport.Wpf
                 // 使用 Serilog 取代內建的日誌機制
                 builder.Logging.AddSerilog();
 
+                // add config
                 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(nameof(AppSettings)));
 
+                // add services
                 builder.Services.AddSingleton<IDialogService, DialogService>();
 
+                // add view models
                 builder.Services.AddSingleton<MainViewModel>();
+                builder.Services.AddSingleton<ExportDraftViewModel>();
 
+                // add pages
                 builder.Services.AddSingleton(p => new MainWindow
                 {
                     DataContext = p.GetRequiredService<MainViewModel>()
                 });
+                builder.Services.AddSingleton(p => new ExportDraftPage
+                {
+                    DataContext = p.GetRequiredService<ExportDraftViewModel>()
+                });
 
-                _host = builder.Build();
+                Host = builder.Build();
 
             }
             catch (Exception ex)
@@ -67,8 +77,8 @@ namespace SGS.NR.AutoReport.Wpf
 
         protected override async void OnStartup(StartupEventArgs e)
         {
-            await _host.StartAsync();
-            var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+            await Host.StartAsync();
+            var mainWindow = Host.Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
             base.OnStartup(e);
 
@@ -76,8 +86,8 @@ namespace SGS.NR.AutoReport.Wpf
 
         protected override async void OnExit(ExitEventArgs e)
         {
-            await _host.StopAsync();
-            _host.Dispose();
+            await Host.StopAsync();
+            Host.Dispose();
             base.OnExit(e);
         }
     }
