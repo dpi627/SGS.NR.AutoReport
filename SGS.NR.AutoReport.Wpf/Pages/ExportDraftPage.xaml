@@ -32,8 +32,7 @@
             Style="{StaticResource MaterialDesignRaisedButton}"
             materialDesign:ButtonAssist.CornerRadius="5"/>
 
-        <DataGrid ItemsSource="{Binding ExcelFiles}"
-            SelectedItem="{Binding SelectedFile}"
+        <DataGrid 
                   Grid.Row="1"
                     Grid.Column="0"
             AutoGenerateColumns="False"
@@ -42,10 +41,8 @@
             SelectionUnit="FullRow">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="File Name"
-            Binding="{Binding ConfigName}"
             Width="*"/>
                 <DataGridTextColumn Header="File Path"
-            Binding="{Binding ConfigPath}"
             Width="2*"
             Visibility="Hidden"/>
             </DataGrid.Columns>
@@ -56,8 +53,6 @@
     Grid.Row="2"
     Width="Auto"
     Margin="10"
-    ItemsSource="{Binding Printers}"
-    SelectedItem="{Binding SelectedPrinter, Mode=TwoWay}"
     Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <StackPanel Orientation="Horizontal"
@@ -65,9 +60,7 @@
             Grid.Row="3"
             Grid.Column="0"
             Margin="10">
-            <ToggleButton IsChecked="{Binding IsAutoPrint, Mode=TwoWay}"
-                    Command="{Binding TogglePrintButtonCommand}"
-                    CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+            <ToggleButton 
                     Style="{StaticResource MaterialDesignSwitchToggleButton}">
             </ToggleButton>
             <TextBlock VerticalAlignment="Center"
@@ -82,8 +75,6 @@
             Grid.Column="0"
             HorizontalAlignment="Right"
             Margin="10"
-            Command="{Binding PrintLabelCommand}"
-            IsEnabled="{Binding IsPrintButtonEnabled}"
             Style="{StaticResource MaterialDesignRaisedButton}"
             materialDesign:ButtonAssist.CornerRadius="5"/>
 

@@ -53,6 +53,7 @@ namespace SGS.NR.AutoReport.Wpf
                 // add view models
                 builder.Services.AddSingleton<MainWindowViewModel>();
                 builder.Services.AddSingleton<ExportDraftViewModel>();
+                builder.Services.AddSingleton<OpenDialogViewModel>();
 
                 // add pages
                 builder.Services.AddSingleton(p => new MainWindow
@@ -62,6 +63,10 @@ namespace SGS.NR.AutoReport.Wpf
                 builder.Services.AddSingleton(p => new ExportDraftPage
                 {
                     DataContext = p.GetRequiredService<ExportDraftViewModel>()
+                });
+                builder.Services.AddSingleton(p => new OpenDialogPage
+                {
+                    DataContext = p.GetRequiredService<OpenDialogViewModel>()
                 });
 
                 Host = builder.Build();
@@ -81,7 +86,7 @@ namespace SGS.NR.AutoReport.Wpf
         {
             await Host.StartAsync();
             var mainWindow = Host.Services.GetRequiredService<MainWindow>();
-            //mainWindow.Show();
+            mainWindow.Show();
 
             // 取得 NavigationService 並設置 Frame
             var navigationService = Host.Services.GetRequiredService<INavigationService>();
@@ -100,6 +105,7 @@ namespace SGS.NR.AutoReport.Wpf
 
                         // 註冊頁面
                         navService.Configure("ExportDraftPage", typeof(ExportDraftPage));
+                        navService.Configure("OpenDialogPage", typeof(OpenDialogPage));
                         //navService.Configure("AnotherPage", typeof(AnotherPage));
 
                         // 導航到初始頁面

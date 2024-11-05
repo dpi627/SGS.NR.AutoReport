@@ -43,9 +43,6 @@ public partial class MainWindowViewModel : ObservableObject
 
         // 非同步RelayCommand 沒有 Attribute 可用：2 再建構子實體化
         NavigateToExportDraftAsyncCommand = new AsyncRelayCommand(NavigateToExportDraftAsync);
-
-        // 初始頁面
-        Task.Run(() => NavigateToExportDraftAsync());
     }
 
     private async Task NavigateToExportDraftAsync()
