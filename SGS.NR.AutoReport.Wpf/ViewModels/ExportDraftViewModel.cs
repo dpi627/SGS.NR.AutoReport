@@ -27,7 +27,7 @@ public partial class ExportDraftViewModel : ObservableObject
         var files = openFileDialog.FileNames;
         foreach (var file in files)
         {
-            Console.WriteLine(file);
+            Debug.WriteLine(file);
         }
     }
 }
