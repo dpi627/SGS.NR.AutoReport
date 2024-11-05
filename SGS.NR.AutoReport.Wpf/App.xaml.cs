@@ -10,6 +10,7 @@ using System.Windows;
 using SGS.NR.Util.Helper;
 using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.AutoReport.Wpf.Pages;
+using System.Windows.Controls;
 
 namespace SGS.NR.AutoReport.Wpf
 {
@@ -47,15 +48,16 @@ namespace SGS.NR.AutoReport.Wpf
 
                 // add services
                 builder.Services.AddSingleton<IDialogService, DialogService>();
+                builder.Services.AddSingleton<INavigationService, NavigationService>();
 
                 // add view models
-                builder.Services.AddSingleton<MainViewModel>();
+                builder.Services.AddSingleton<MainWindowViewModel>();
                 builder.Services.AddSingleton<ExportDraftViewModel>();
 
                 // add pages
                 builder.Services.AddSingleton(p => new MainWindow
                 {
-                    DataContext = p.GetRequiredService<MainViewModel>()
+                    DataContext = p.GetRequiredService<MainWindowViewModel>()
                 });
                 builder.Services.AddSingleton(p => new ExportDraftPage
                 {
@@ -79,7 +81,33 @@ namespace SGS.NR.AutoReport.Wpf
         {
             await Host.StartAsync();
             var mainWindow = Host.Services.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            //mainWindow.Show();
+
+            // 取得 NavigationService 並設置 Frame
+            var navigationService = Host.Services.GetRequiredService<INavigationService>();
+            if (navigationService is NavigationService navService)
+            {
+                // 確保主窗口已初始化並載入 XAML 元素
+                mainWindow.Show(); // 顯示主窗口以確保 XAML 元素已載入
+
+                // 使用 Dispatcher 延遲設置 Frame，確保 Frame 已被初始化
+                await mainWindow.Dispatcher.InvokeAsync(() =>
+                {
+                    var frame = mainWindow.FindName("MainFrame") as Frame;
+                    if (frame != null)
+                    {
+                        navService.SetFrame(frame);
+
+                        // 註冊頁面
+                        navService.Configure("ExportDraftPage", typeof(ExportDraftPage));
+                        //navService.Configure("AnotherPage", typeof(AnotherPage));
+
+                        // 導航到初始頁面
+                        navService.NavigateTo("ExportDraftPage");
+                    }
+                });
+            }
+
             base.OnStartup(e);
 
         }
