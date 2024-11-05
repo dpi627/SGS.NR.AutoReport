@@ -28,8 +28,7 @@
             Grid.Column="0"
             HorizontalAlignment="Left"
             Margin="10"
-            Command="{Binding PrintLabelCommand}"
-            IsEnabled="{Binding IsPrintButtonEnabled}"
+            Command="{Binding ImportExcelCommand}"
             Style="{StaticResource MaterialDesignRaisedButton}"
             materialDesign:ButtonAssist.CornerRadius="5"/>
 

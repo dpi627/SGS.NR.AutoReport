@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vm="clr-namespace:SGS.NR.AutoReport.Wpf.ViewModels"
-        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
         Style="{StaticResource MaterialDesignWindow}"
         Title="{Binding WindowTitle}"

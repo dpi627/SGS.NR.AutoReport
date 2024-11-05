@@ -1,14 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace SGS.NR.AutoReport.Wpf.ViewModels;
 
 public partial class ExportDraftViewModel : ObservableObject
 {
     [RelayCommand]
-    private void ImportExcel()
+    public void ImportExcel()
     {
+        Debug.WriteLine("ImportExcel command executed");
+
         var openFileDialog = new OpenFileDialog
         {
             Filter = "Excel Files|*.xlsx",
