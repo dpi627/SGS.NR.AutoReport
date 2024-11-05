@@ -81,7 +81,7 @@ namespace SGS.NR.AutoReport.Wpf
         {
             await Host.StartAsync();
             var mainWindow = Host.Services.GetRequiredService<MainWindow>();
-            //mainWindow.Show();
+            mainWindow.Show();
 
             // 取得 NavigationService 並設置 Frame
             var navigationService = Host.Services.GetRequiredService<INavigationService>();
@@ -93,17 +93,16 @@ namespace SGS.NR.AutoReport.Wpf
                 // 使用 Dispatcher 延遲設置 Frame，確保 Frame 已被初始化
                 await mainWindow.Dispatcher.InvokeAsync(() =>
                 {
-                    var frame = mainWindow.FindName("MainFrame") as Frame;
-                    if (frame != null)
+                    if (mainWindow.FindName("MainFrame") is Frame frame)
                     {
                         navService.SetFrame(frame);
 
                         // 註冊頁面
-                        navService.Configure("ExportDraftPage", typeof(ExportDraftPage));
+                        navService.Configure(nameof(ExportDraftPage), typeof(ExportDraftPage));
                         //navService.Configure("AnotherPage", typeof(AnotherPage));
 
                         // 導航到初始頁面
-                        navService.NavigateTo("ExportDraftPage");
+                        navService.NavigateTo(nameof(ExportDraftPage));
                     }
                 });
             }

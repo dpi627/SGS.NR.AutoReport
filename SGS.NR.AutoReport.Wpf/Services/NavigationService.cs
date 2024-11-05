@@ -1,11 +1,12 @@
-﻿using System.Windows.Controls;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Controls;
 
 namespace SGS.NR.AutoReport.Wpf.Services;
 
-public class NavigationService() : INavigationService
+public class NavigationService(IServiceProvider serviceProvider) : INavigationService
 {
     private readonly Dictionary<string, Type> _pagesByKey = [];
-    private Frame _mainFrame;
+    private Frame? _mainFrame;
 
     public void SetFrame(Frame frame)
     {
@@ -26,12 +27,13 @@ public class NavigationService() : INavigationService
             throw new ArgumentException($"No such page: {pageKey}. Did you forget to call NavigationService.Configure?");
 
         var type = _pagesByKey[pageKey];
-        _mainFrame.Navigate(Activator.CreateInstance(type));
+        var page = serviceProvider.GetRequiredService(type);
+        _mainFrame?.Navigate(page);
     }
 
     public void GoBack()
     {
-        if (_mainFrame.CanGoBack)
+        if (_mainFrame != null && _mainFrame.CanGoBack)
             _mainFrame.GoBack();
     }
 }
