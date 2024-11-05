@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.NR.AutoReport", "SGS.NR.AutoReport\SGS.NR.AutoReport.csproj", "{685CD2EA-0946-4FAD-A212-CE3467A1D15C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.NR.AutoReport", "SGS.NR.AutoReport\SGS.NR.AutoReport.csproj", "{685CD2EA-0946-4FAD-A212-CE3467A1D15C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.NR.Repository", "SGS.NR.Repository\SGS.NR.Repository.csproj", "{211BB43E-032F-4C8C-9E71-4D5E63CEF690}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.NR.Repository", "SGS.NR.Repository\SGS.NR.Repository.csproj", "{211BB43E-032F-4C8C-9E71-4D5E63CEF690}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.NR.Service", "SGS.NR.Service\SGS.NR.Service.csproj", "{C3DA2D4E-A29B-4416-BD97-E6A283E411F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.NR.Service", "SGS.NR.Service\SGS.NR.Service.csproj", "{C3DA2D4E-A29B-4416-BD97-E6A283E411F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.NR.Util", "SGS.NR.Util\SGS.NR.Util.csproj", "{62FC21A9-0A38-4FF0-B416-89C2B3FC486B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.NR.Util", "SGS.NR.Util\SGS.NR.Util.csproj", "{62FC21A9-0A38-4FF0-B416-89C2B3FC486B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CovertExcelToWord", "CovertExcelToWord\CovertExcelToWord.csproj", "{6D775939-4D91-48A5-A7FE-D38970152836}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.NR.AutoReport.Wpf", "SGS.NR.AutoReport.Wpf\SGS.NR.AutoReport.Wpf.csproj", "{7E086D11-1A7E-4301-A62E-68922D28B9E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{62FC21A9-0A38-4FF0-B416-89C2B3FC486B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62FC21A9-0A38-4FF0-B416-89C2B3FC486B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62FC21A9-0A38-4FF0-B416-89C2B3FC486B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D775939-4D91-48A5-A7FE-D38970152836}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D775939-4D91-48A5-A7FE-D38970152836}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D775939-4D91-48A5-A7FE-D38970152836}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D775939-4D91-48A5-A7FE-D38970152836}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E086D11-1A7E-4301-A62E-68922D28B9E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E086D11-1A7E-4301-A62E-68922D28B9E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E086D11-1A7E-4301-A62E-68922D28B9E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E086D11-1A7E-4301-A62E-68922D28B9E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

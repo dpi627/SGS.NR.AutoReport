@@ -1,8 +1,9 @@
-﻿namespace SGS.NR.Service.DTO.ResultModel
+﻿#nullable disable
+
+namespace SGS.NR.Service.DTO.ResultModel;
+
+public record BaseResultModel
 {
-    public record BaseResultModel
-    {
-        public bool IsSuccess { get; set; }
-        public string? Message { get; set; }
-    }
+    public bool IsSuccess { get; set; } = true;
+    public string Message { get; set; }
 }
