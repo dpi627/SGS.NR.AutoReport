@@ -38,8 +38,23 @@ public partial class ExportDraftViewModel : ObservableObject
             ExcelFiles.Add(new ExcelFile
             {
                 FileName = Path.GetFileName(file),
-                FilePath = file
+                FilePath = file,
+                IsChecked = true
             });
+        }
+    }
+
+    [RelayCommand]
+    public void ExportWord()
+    {
+        Debug.WriteLine("Export command executed");
+
+        foreach (var excelFile in ExcelFiles)
+        {
+            if (!excelFile.IsChecked)
+                continue;
+
+            Debug.WriteLine(excelFile.FileName);
         }
     }
 }

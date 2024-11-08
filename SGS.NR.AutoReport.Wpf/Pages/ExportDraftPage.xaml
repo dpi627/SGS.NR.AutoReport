@@ -35,15 +35,29 @@
         <DataGrid ItemsSource="{Binding ExcelFiles}"
                   SelectedItem="{Binding SelectedFile}"
                   Grid.Row="1"
-                    Grid.Column="0"
-            AutoGenerateColumns="False"
-            IsReadOnly="True"
-            SelectionMode="Single"
-            SelectionUnit="FullRow">
+                Grid.Column="0"
+                AutoGenerateColumns="False"
+                IsReadOnly="False"
+                CanUserAddRows="False"
+                SelectionMode="Single"
+                SelectionUnit="FullRow">
             <DataGrid.Columns>
+                <!-- 勾選 -->
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource MaterialDesignCheckBox}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- 檔案名稱 -->
                 <DataGridTextColumn Header="File Name"
                                     Binding="{Binding FileName}"
             Width="*"/>
+
+                <!-- 檔案路徑 -->
                 <DataGridTextColumn Header="File Path"
                                     Binding="{Binding FilePath}"
             Width="2*"
@@ -78,6 +92,7 @@
             Grid.Column="0"
             HorizontalAlignment="Right"
             Margin="10"
+            Command="{Binding ExportWordCommand}"
             Style="{StaticResource MaterialDesignRaisedButton}"
             materialDesign:ButtonAssist.CornerRadius="5"/>
 

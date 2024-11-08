@@ -1,9 +1,17 @@
 ﻿#nullable disable
 
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace SGS.NR.AutoReport.Wpf.Models;
 
-public record ExcelFile
+public partial class ExcelFile : ObservableObject
 {
-    public string FileName { get; init; }
-    public string FilePath { get; init; }
+    [ObservableProperty]
+    private string fileName;
+
+    [ObservableProperty]
+    private string filePath;
+
+    [ObservableProperty]
+    private bool isChecked;
 }
