@@ -10,10 +10,18 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Templates\Draft.Container.Load.docx" />
+    <None Remove="Templates\Draft.Vessel.Load.docx" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Draft.Container.Load.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Draft.Vessel.Load.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
