@@ -6,7 +6,8 @@ using SGS.NR.Repository.Interface;
 using SGS.NR.Service.Implement;
 using SGS.NR.Service.Interface;
 
-namespace SGS.NR.AutoReport.Extension;
+namespace SGS.NR.AutoReport.Wpf.Extensions;
+
 
 /// <summary>
 /// 註冊服務擴充方法
@@ -46,7 +47,7 @@ public static class ServiceExtension
     {
         var config = new TypeAdapterConfig();
         services.AddSingleton(config);
-        services.AddScoped<IMapper, ServiceMapper>();
+        services.AddScoped<IMapper, Mapper>();
 
         return services;
     }

@@ -65,12 +65,15 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <ComboBox x:Name="cbbPrinter"
-    Grid.Column="0"
-    Grid.Row="2"
-    Width="Auto"
-    Margin="10"
-    Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+        <ComboBox x:Name="cbbDraftTemplate"
+            Grid.Column="0"
+            Grid.Row="2"
+            Width="Auto"
+            Margin="10"
+            ItemsSource="{Binding DraftTempFiles}"
+            SelectedItem="{Binding SelectedDraftTempFile, Mode=TwoWay}"
+            DisplayMemberPath="FileName"
+            Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <StackPanel Orientation="Horizontal"
             HorizontalAlignment="Left"

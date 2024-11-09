@@ -11,6 +11,8 @@ using SGS.NR.Util.Helper;
 using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.AutoReport.Wpf.Pages;
 using System.Windows.Controls;
+using SGS.NR.AutoReport.Wpf.Extensions;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace SGS.NR.AutoReport.Wpf
 {
@@ -38,9 +40,9 @@ namespace SGS.NR.AutoReport.Wpf
             {
                 Log.Information("{Application} {Version} 啟動");
 
-                // 清除預設的日誌提供者
+                    // 清除預設的日誌提供者
                 builder.Logging.ClearProviders();
-                // 使用 Serilog 取代內建的日誌機制
+                    // 使用 Serilog 取代內建的日誌機制
                 builder.Logging.AddSerilog();
 
                 // add config
@@ -64,16 +66,18 @@ namespace SGS.NR.AutoReport.Wpf
                     DataContext = p.GetRequiredService<ExportDraftViewModel>()
                 });
 
+                // 註冊服務
+                builder.Services.AddServices()
+                    .AddRepositories()
+                    .AddMiscs();
+
                 Host = builder.Build();
 
             }
             catch (Exception ex)
             {
                 Log.Fatal(ex, "Host terminated unexpectedly");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
+                throw;
             }
         }
 
@@ -113,8 +117,12 @@ namespace SGS.NR.AutoReport.Wpf
 
         protected override async void OnExit(ExitEventArgs e)
         {
-            await Host.StopAsync();
-            Host.Dispose();
+            Log.Information("{Application} {Version} 關閉");
+            using (Host)
+            {
+                await Host.StopAsync();
+            }
+            Log.CloseAndFlush(); // 在應用結束時關閉 Serilog
             base.OnExit(e);
         }
     }

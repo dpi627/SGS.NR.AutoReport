@@ -16,6 +16,7 @@
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <!--<System:Double x:Key="ButtonWidth">90</System:Double>-->
+            <System:Double x:Key="DialogButtonWidth">90</System:Double>
             <System:Double x:Key="IconSize">25</System:Double>
         </ResourceDictionary>
     </Application.Resources>

@@ -6,22 +6,41 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>icon-cer.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="icon-cer.ico" />
     <None Remove="Templates\Draft.Container.Load.docx" />
     <None Remove="Templates\Draft.Vessel.Load.docx" />
+    <None Remove="Templates\Draft.Vessel.Unload.02006.docx" />
+    <None Remove="Templates\Draft.Vessel.Unload.24301715.docx" />
+    <None Remove="Templates\Draft.Vessel.Unload.24304166.docx" />
+    <None Remove="Templates\Draft.Vessel.Unload.24305257.docx" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="icon-cer.ico" />
     <Content Include="Templates\Draft.Container.Load.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\Draft.Vessel.Load.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Draft.Vessel.Unload.02006.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Draft.Vessel.Unload.24301715.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Draft.Vessel.Unload.24304166.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Draft.Vessel.Unload.24305257.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -37,7 +56,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SGS.NR.Util\SGS.NR.Util.csproj" />
+    <ProjectReference Include="..\SGS.NR.Service\SGS.NR.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icon-cer.ico" />
   </ItemGroup>
 
 </Project>
