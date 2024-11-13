@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <Content Include="Aspose.Total.655.lic">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
