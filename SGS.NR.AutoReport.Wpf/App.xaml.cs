@@ -5,44 +5,48 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using SGS.NR.AutoReport.Wpf.Services;
 using SGS.NR.AutoReport.Wpf.ViewModels;
-using System.IO;
 using System.Windows;
 using SGS.NR.Util.Helper;
 using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.AutoReport.Wpf.Pages;
 using System.Windows.Controls;
 using SGS.NR.AutoReport.Wpf.Extensions;
-using System.Runtime.InteropServices.JavaScript;
 
 namespace SGS.NR.AutoReport.Wpf
 {
     public partial class App : Application
     {
-        public static IHost Host;
+        private static string? _environment;
+        private static string? _appName;
+        private static readonly string? _version = VersionHelper.CurrentVersion;
+        private static IHost? _host;
 
         public App()
         {
-            var builder = Microsoft.Extensions.Hosting.Host.CreateApplicationBuilder();
+            var builder = Host.CreateApplicationBuilder();
 
-            builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
-                // 載入設定檔 (必須存在，執行期間修改會重載)
+            _environment = builder.Environment.EnvironmentName;
+            _appName = builder.Environment.ApplicationName;
+
+            // 設定組態檔
+            builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                // 載入環境設定檔 (非必要，適合部署人員搭配使用)
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true);
+                .AddJsonFile($"appsettings.{_environment}.json", optional: true, reloadOnChange: true);
 
             // 設定 Serilog
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Configuration) // 讀取設定檔中的日誌設定
-                .Enrich.WithProperty("Version", VersionHelper.CurrentVersion) // 版本無法寫在設定檔
+                .Enrich.WithProperty("Version", _version) // 版本無法寫在設定檔
+                .Enrich.WithProperty("Application", _appName) //應用程式名稱不寫於設定檔
                 .CreateLogger();
 
             try
             {
-                Log.Information("{Application} {Version} 啟動");
+                Log.Information("{Application} {Version} 於 {EnvironmentName} 啟動", _appName, _version, _environment);
 
-                    // 清除預設的日誌提供者
+                // 清除預設的日誌提供者
                 builder.Logging.ClearProviders();
-                    // 使用 Serilog 取代內建的日誌機制
+                // 使用 Serilog 取代內建的日誌機制
                 builder.Logging.AddSerilog();
 
                 // add config
@@ -71,24 +75,24 @@ namespace SGS.NR.AutoReport.Wpf
                     .AddRepositories()
                     .AddMiscs();
 
-                Host = builder.Build();
+                _host = builder.Build();
 
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly");
+                Log.Fatal(ex, "{Application} {Version} 異常", _appName, _version);
                 throw;
             }
         }
 
         protected override async void OnStartup(StartupEventArgs e)
         {
-            await Host.StartAsync();
-            var mainWindow = Host.Services.GetRequiredService<MainWindow>();
+            await _host.StartAsync();
+            var mainWindow = _host.Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
 
             // 取得 NavigationService 並設置 Frame
-            var navigationService = Host.Services.GetRequiredService<INavigationService>();
+            var navigationService = _host.Services.GetRequiredService<INavigationService>();
             if (navigationService is NavigationService navService)
             {
                 // 確保主窗口已初始化並載入 XAML 元素
@@ -112,15 +116,14 @@ namespace SGS.NR.AutoReport.Wpf
             }
 
             base.OnStartup(e);
-
         }
 
         protected override async void OnExit(ExitEventArgs e)
         {
             Log.Information("{Application} {Version} 關閉");
-            using (Host)
+            using (_host)
             {
-                await Host.StopAsync();
+                await _host.StopAsync();
             }
             Log.CloseAndFlush(); // 在應用結束時關閉 Serilog
             base.OnExit(e);
