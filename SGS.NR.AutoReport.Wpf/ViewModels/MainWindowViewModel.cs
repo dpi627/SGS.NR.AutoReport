@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Options;
 using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.AutoReport.Wpf.Services;
@@ -10,6 +11,8 @@ namespace SGS.NR.AutoReport.Wpf.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
+    private readonly IMessenger _messenger;
+
     [ObservableProperty]
     private bool _isLeftDrawerOpen;
 
@@ -33,10 +36,13 @@ public partial class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel(
         INavigationService navigationService,
-        IOptions<AppSettings> appSettings)
+        IOptions<AppSettings> appSettings,
+        IMessenger messenger)
     {
         _navigationService = navigationService;
         _appSettings = appSettings.Value;
+        _messenger = messenger;
+        _messenger.Register<LoadingMessage>(this, (r, m) => IsLoading = m.IsLoading);
 
         WindowTitle = $"{AppDomain.CurrentDomain.FriendlyName} - {VersionHelper.CurrentVersion}";
         AppTitle = _appSettings.AppTitle;

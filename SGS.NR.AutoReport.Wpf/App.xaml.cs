@@ -11,6 +11,7 @@ using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.AutoReport.Wpf.Pages;
 using System.Windows.Controls;
 using SGS.NR.AutoReport.Wpf.Extensions;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace SGS.NR.AutoReport.Wpf
 {
@@ -55,6 +56,7 @@ namespace SGS.NR.AutoReport.Wpf
                 // add services
                 builder.Services.AddSingleton<IDialogService, DialogService>();
                 builder.Services.AddSingleton<INavigationService, NavigationService>();
+                builder.Services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
                 // add view models
                 builder.Services.AddSingleton<MainWindowViewModel>();

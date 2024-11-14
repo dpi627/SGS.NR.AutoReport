@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using MapsterMapper;
 using Microsoft.Win32;
 using SGS.NR.AutoReport.Wpf.Models;
@@ -18,6 +19,7 @@ public partial class ExportDraftViewModel : ObservableObject
     private readonly IMapper _mapper;
     private IContainerLoadingService _serviceCL;
     private IVesselLoadingService _serviceVL;
+    private readonly IMessenger _messenger;
 
     [ObservableProperty]
     private ObservableCollection<ExcelFile> _excelFiles = [];
@@ -32,12 +34,14 @@ public partial class ExportDraftViewModel : ObservableObject
         IContainerLoadingService serviceCL,
         IVesselLoadingService serviceVL,
         IMapper mapper,
-        IDialogService dialog)
+        IDialogService dialog,
+        IMessenger messenger)
     {
         _dialog = dialog;
         _mapper = mapper;
         _serviceCL = serviceCL;
         _serviceVL = serviceVL;
+        _messenger = messenger;
 
         GetDraftTemplate();
 
@@ -76,36 +80,37 @@ public partial class ExportDraftViewModel : ObservableObject
         }
     }
 
-    [RelayCommand]
-    public void ExportWord()
-    {
-        foreach (var excelFile in ExcelFiles)
-        {
-            if (!excelFile.IsChecked)
-                continue;
+    //[RelayCommand]
+    //public void ExportWord()
+    //{
+    //    foreach (var excelFile in ExcelFiles)
+    //    {
+    //        if (!excelFile.IsChecked)
+    //            continue;
 
-            //Debug.WriteLine(excelFile.FilePath);
-            try {
-                var DraftInfo = new DraftInfo
-                {
-                    SourcePath = excelFile.FilePath,
-                    TemplatePath = SelectedDraftTempFile?.FilePath,
-                    TargetPath = $@"C:\dev\_tmp\{DateTime.Now:yyyyMMddHHmmssfff}.docx"
-                };
-                ExportDraft(DraftInfo);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-        }
+    //        //Debug.WriteLine(excelFile.FilePath);
+    //        try
+    //        {
+    //            var DraftInfo = new DraftInfo
+    //            {
+    //                SourcePath = excelFile.FilePath,
+    //                TemplatePath = SelectedDraftTempFile?.FilePath,
+    //                TargetPath = $@"C:\dev\_tmp\{DateTime.Now:yyyyMMddHHmmssfff}.docx"
+    //            };
+    //            ExportDraft(DraftInfo);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Debug.WriteLine(ex.Message);
+    //        }
+    //    }
 
-        _dialog.ShowMessage("報告草稿(Word)製作完成");
-    }
+    //    _dialog.ShowMessage("報告草稿(Word)製作完成");
+    //}
 
     private void ExportDraft(DraftInfo draftInfo)
     {
-        if(draftInfo.TemplatePath.Contains("Draft.Container.Load.docx"))
+        if (draftInfo.TemplatePath.Contains("Draft.Container.Load.docx"))
         {
             var clInfo = _mapper.Map<ContainerLoadingInfo>(draftInfo);
             _ = _serviceCL.GetDraft(clInfo);
@@ -116,6 +121,51 @@ public partial class ExportDraftViewModel : ObservableObject
             _ = _serviceVL.GetDraft(vlInfo);
         }
     }
+    [RelayCommand]
+    public async Task ExportWordAsync()
+    {
+        //IsLoading = true; // 開始顯示讀取動畫
+        _messenger.Send(new LoadingMessage(true));
+
+        try
+        {
+            await Task.Run(() =>
+            {
+                foreach (var excelFile in ExcelFiles)
+                {
+                    if (!excelFile.IsChecked)
+                        continue;
+
+                    try
+                    {
+                        var draftInfo = new DraftInfo
+                        {
+                            SourcePath = excelFile.FilePath,
+                            TemplatePath = SelectedDraftTempFile?.FilePath,
+                            TargetPath = $@"C:\dev\_tmp\{DateTime.Now:yyyyMMddHHmmssfff}.docx"
+                        };
+                        ExportDraft(draftInfo);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            throw;
+        }
+        finally
+        {
+            //IsLoading = false; // 隱藏讀取動畫
+            _messenger.Send(new LoadingMessage(false));
+            _dialog.ShowMessage("報告草稿(Word)製作完成");
+        }
+    }
+
 
     public void GetDraftTemplate()
     {
