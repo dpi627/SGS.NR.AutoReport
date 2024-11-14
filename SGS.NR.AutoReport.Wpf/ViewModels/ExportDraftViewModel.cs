@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MapsterMapper;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.AutoReport.Wpf.Services;
@@ -17,9 +18,11 @@ public partial class ExportDraftViewModel : ObservableObject
 {
     private readonly IDialogService _dialog;
     private readonly IMapper _mapper;
+    private readonly ILogger _logger;
     private IContainerLoadingService _serviceCL;
     private IVesselLoadingService _serviceVL;
     private readonly IMessenger _messenger;
+    private string _targetFileDirectory = @"C:\SGSLIMS\NR";
 
     [ObservableProperty]
     private ObservableCollection<ExcelFile> _excelFiles = [];
@@ -35,10 +38,12 @@ public partial class ExportDraftViewModel : ObservableObject
         IVesselLoadingService serviceVL,
         IMapper mapper,
         IDialogService dialog,
-        IMessenger messenger)
+        IMessenger messenger,
+        ILogger<ExportDraftViewModel> logger)
     {
         _dialog = dialog;
         _mapper = mapper;
+        _logger = logger;
         _serviceCL = serviceCL;
         _serviceVL = serviceVL;
         _messenger = messenger;
@@ -50,10 +55,8 @@ public partial class ExportDraftViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void ImportExcel()
+    private void ImportExcel()
     {
-        Debug.WriteLine("ImportExcel command executed");
-
         var openFileDialog = new OpenFileDialog
         {
             Filter = "Excel Files|*.xlsm",
@@ -69,8 +72,6 @@ public partial class ExportDraftViewModel : ObservableObject
         var files = openFileDialog.FileNames;
         foreach (var file in files)
         {
-            //Debug.WriteLine(file);
-
             ExcelFiles.Add(new ExcelFile
             {
                 FileName = Path.GetFileName(file),
@@ -78,38 +79,59 @@ public partial class ExportDraftViewModel : ObservableObject
                 IsChecked = true
             });
         }
+        _logger.LogInformation("Import Excel: {@Excels}", ExcelFiles);
     }
 
-    //[RelayCommand]
-    //public void ExportWord()
-    //{
-    //    foreach (var excelFile in ExcelFiles)
-    //    {
-    //        if (!excelFile.IsChecked)
-    //            continue;
+    [RelayCommand]
+    private async Task ExportWordAsync()
+    {
+        _messenger.Send(new LoadingMessage(true));
 
-    //        //Debug.WriteLine(excelFile.FilePath);
-    //        try
-    //        {
-    //            var DraftInfo = new DraftInfo
-    //            {
-    //                SourcePath = excelFile.FilePath,
-    //                TemplatePath = SelectedDraftTempFile?.FilePath,
-    //                TargetPath = $@"C:\dev\_tmp\{DateTime.Now:yyyyMMddHHmmssfff}.docx"
-    //            };
-    //            ExportDraft(DraftInfo);
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            Debug.WriteLine(ex.Message);
-    //        }
-    //    }
+        try
+        {
+            await Task.Run(() =>
+            {
+                CheckDirectoryExist(_targetFileDirectory);
+                string targetFileName;
+                foreach (var excelFile in ExcelFiles)
+                {
+                    if (!excelFile.IsChecked)
+                        continue;
+                    Task.Delay(1000).Wait();
+                    targetFileName = Path.GetFileNameWithoutExtension(excelFile.FileName);
+                    var draftInfo = new DraftInfo
+                    {
+                        SourcePath = excelFile.FilePath,
+                        TemplatePath = SelectedDraftTempFile?.FilePath,
+                        TargetPath = Path.Combine(_targetFileDirectory, $"{targetFileName}.docx")
+                    };
 
-    //    _dialog.ShowMessage("報告草稿(Word)製作完成");
-    //}
+                    ExportDraft(draftInfo);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            throw;
+        }
+        finally
+        {
+            _messenger.Send(new LoadingMessage(false));
+            _dialog.ShowMessage("報告草稿(Word)製作完成");
+        }
+    }
+
+    private static void CheckDirectoryExist(string path)
+    {
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
+    }
 
     private void ExportDraft(DraftInfo draftInfo)
     {
+        _logger.LogInformation("Export Draft: {@DraftInfo}", draftInfo);
+
         if (draftInfo.TemplatePath.Contains("Draft.Container.Load.docx"))
         {
             var clInfo = _mapper.Map<ContainerLoadingInfo>(draftInfo);
@@ -121,56 +143,9 @@ public partial class ExportDraftViewModel : ObservableObject
             _ = _serviceVL.GetDraft(vlInfo);
         }
     }
-    [RelayCommand]
-    public async Task ExportWordAsync()
-    {
-        //IsLoading = true; // 開始顯示讀取動畫
-        _messenger.Send(new LoadingMessage(true));
-
-        try
-        {
-            await Task.Run(() =>
-            {
-                foreach (var excelFile in ExcelFiles)
-                {
-                    if (!excelFile.IsChecked)
-                        continue;
-
-                    try
-                    {
-                        var draftInfo = new DraftInfo
-                        {
-                            SourcePath = excelFile.FilePath,
-                            TemplatePath = SelectedDraftTempFile?.FilePath,
-                            TargetPath = $@"C:\dev\_tmp\{DateTime.Now:yyyyMMddHHmmssfff}.docx"
-                        };
-                        ExportDraft(draftInfo);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.Message);
-                    }
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.Message);
-            throw;
-        }
-        finally
-        {
-            //IsLoading = false; // 隱藏讀取動畫
-            _messenger.Send(new LoadingMessage(false));
-            _dialog.ShowMessage("報告草稿(Word)製作完成");
-        }
-    }
-
 
     public void GetDraftTemplate()
     {
-        Debug.WriteLine("GetDraftTemplate command executed");
-
         var templateDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Templates");
         if (!Directory.Exists(templateDirectory))
         {
@@ -189,5 +164,6 @@ public partial class ExportDraftViewModel : ObservableObject
                 FilePath = file
             });
         }
+        _logger.LogInformation("Draft Temp Files: {@DraftTempFiles}", DraftTempFiles);
     }
 }

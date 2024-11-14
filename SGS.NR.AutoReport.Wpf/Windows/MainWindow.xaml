@@ -42,7 +42,7 @@
                         <Button FontSize="16"
                                 Height="60"
                                 Style="{StaticResource MaterialDesignFlatButton}"
-                                Command="{Binding NavigateToExportDraftAsyncCommand}"
+                                Command="{Binding NavigateToExportDraftCommand}"
                                 HorizontalContentAlignment="Left"
                                 Width="Auto">
                             <StackPanel Orientation="Horizontal">

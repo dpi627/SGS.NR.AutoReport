@@ -31,9 +31,6 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly INavigationService _navigationService;
     private readonly AppSettings _appSettings;
 
-    // 非同步RelayCommand 沒有 Attribute 可用：1 要先宣告屬性
-    public IAsyncRelayCommand NavigateToExportDraftAsyncCommand { get; }
-
     public MainWindowViewModel(
         INavigationService navigationService,
         IOptions<AppSettings> appSettings,
@@ -46,11 +43,9 @@ public partial class MainWindowViewModel : ObservableObject
 
         WindowTitle = $"{AppDomain.CurrentDomain.FriendlyName} - {VersionHelper.CurrentVersion}";
         AppTitle = _appSettings.AppTitle;
-
-        // 非同步RelayCommand 沒有 Attribute 可用：2 再建構子實體化
-        NavigateToExportDraftAsyncCommand = new AsyncRelayCommand(NavigateToExportDraftAsync);
     }
 
+    [RelayCommand]
     private async Task NavigateToExportDraftAsync()
     {
         await NavigateToPageAsync("ExportDraftPage");
