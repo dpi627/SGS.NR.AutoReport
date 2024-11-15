@@ -8,6 +8,7 @@ using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.AutoReport.Wpf.Services;
 using SGS.NR.Service.DTO.Info;
 using SGS.NR.Service.Interface;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -32,6 +33,12 @@ public partial class ExportDraftViewModel : ObservableObject
 
     [ObservableProperty]
     private DraftTempFile? _selectedDraftTempFile;
+
+    [ObservableProperty]
+    private double _progressValue;
+
+    [ObservableProperty]
+    private bool _isExporting;
 
     public ExportDraftViewModel(
         IContainerLoadingService serviceCL,
@@ -85,6 +92,23 @@ public partial class ExportDraftViewModel : ObservableObject
     [RelayCommand]
     private async Task ExportWordAsync()
     {
+        // 計算要處理的檔案總數
+        var filesToProcess = ExcelFiles.Count(x => x.IsChecked);
+        
+        if (!ExcelFiles.Any())
+        {
+            _dialog.ShowMessage("請先匯入檔案");
+            return;
+        }
+
+        if (filesToProcess == 0)
+        {
+            _dialog.ShowMessage("請勾選至少一筆資料");
+            return;
+        }
+
+        IsExporting = true;
+        ProgressValue = 0;
         _messenger.Send(new LoadingMessage(true));
 
         try
@@ -93,11 +117,13 @@ public partial class ExportDraftViewModel : ObservableObject
             {
                 CheckDirectoryExist(_targetFileDirectory);
                 string targetFileName;
+
+                var currentFile = 0;
                 foreach (var excelFile in ExcelFiles)
                 {
                     if (!excelFile.IsChecked)
                         continue;
-                    Task.Delay(1000).Wait();
+
                     targetFileName = Path.GetFileNameWithoutExtension(excelFile.FileName);
                     var draftInfo = new DraftInfo
                     {
@@ -106,7 +132,12 @@ public partial class ExportDraftViewModel : ObservableObject
                         TargetPath = Path.Combine(_targetFileDirectory, $"{targetFileName}.docx")
                     };
 
+                    _logger.LogInformation("#{Seq} From {Excel} to {Word}", currentFile, draftInfo.SourcePath, draftInfo.TargetPath);
                     ExportDraft(draftInfo);
+
+                    // 更新進度
+                    currentFile++;
+                    ProgressValue = (double)currentFile / filesToProcess * 100;
                 }
             });
         }
@@ -117,8 +148,11 @@ public partial class ExportDraftViewModel : ObservableObject
         }
         finally
         {
+            ProgressValue = 100;
             _messenger.Send(new LoadingMessage(false));
-            _dialog.ShowMessage("報告草稿(Word)製作完成");
+            _dialog.ShowMessage("報告草稿製作完成");
+            await Task.Delay(1000);
+            IsExporting = false;
         }
     }
 
@@ -130,7 +164,7 @@ public partial class ExportDraftViewModel : ObservableObject
 
     private void ExportDraft(DraftInfo draftInfo)
     {
-        _logger.LogInformation("Export Draft: {@DraftInfo}", draftInfo);
+        _logger.LogInformation("Source Excel: {Excel}", draftInfo.SourcePath);
 
         if (draftInfo.TemplatePath.Contains("Draft.Container.Load.docx"))
         {
@@ -142,6 +176,8 @@ public partial class ExportDraftViewModel : ObservableObject
             var vlInfo = _mapper.Map<VesselLoadingInfo>(draftInfo);
             _ = _serviceVL.GetDraft(vlInfo);
         }
+
+        _logger.LogInformation("Target Word: {Word}", draftInfo.TargetPath);
     }
 
     public void GetDraftTemplate()
@@ -165,5 +201,31 @@ public partial class ExportDraftViewModel : ObservableObject
             });
         }
         _logger.LogInformation("Draft Temp Files: {@DraftTempFiles}", DraftTempFiles);
+    }
+
+    [RelayCommand]
+    private void OpenExportDirectory()
+    {
+        try
+        {
+            if (Directory.Exists(_targetFileDirectory))
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = _targetFileDirectory,
+                    UseShellExecute = true,
+                    Verb = "open"
+                });
+            }
+            else
+            {
+                _dialog.ShowMessage("The directory does not exist.");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to open the export directory.");
+            _dialog.ShowMessage("Failed to open the export directory.");
+        }
     }
 }

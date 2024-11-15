@@ -57,6 +57,7 @@
                         </Button>
                         <Button FontSize="16"
                                 Height="50"
+                                Visibility="Hidden"
                                 Style="{StaticResource MaterialDesignFlatButton}"
                                 Command="{Binding NavigateToExcelConfigAsyncCommand}"
                                 HorizontalContentAlignment="Left">
@@ -87,7 +88,7 @@
                          IsIndeterminate="True"
                          Width="50"
                          Height="50"/>
-                            <TextBlock Text="Loading..."
+                            <TextBlock Text="Processing..."
                        HorizontalAlignment="Center"
                        Margin="0,8,0,0"/>
                         </StackPanel>

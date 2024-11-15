@@ -32,18 +32,6 @@
     <Content Include="Templates\Draft.Vessel.Load.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\Draft.Vessel.Unload.02006.docx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Templates\Draft.Vessel.Unload.24301715.docx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Templates\Draft.Vessel.Unload.24304166.docx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Templates\Draft.Vessel.Unload.24305257.docx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
