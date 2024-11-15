@@ -228,4 +228,11 @@ public partial class ExportDraftViewModel : ObservableObject
             _dialog.ShowMessage("Failed to open the export directory.");
         }
     }
+
+    // add command ClearDataGridCommand to clean griddata
+    [RelayCommand]
+    private void ClearDataGrid()
+    {
+        ExcelFiles.Clear();
+    }
 }

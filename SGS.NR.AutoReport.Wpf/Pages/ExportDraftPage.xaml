@@ -5,11 +5,11 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:SGS.NR.AutoReport.Wpf.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:vm="clr-namespace:SGS.NR.AutoReport.Wpf.ViewModels"
-    d:DataContext="{d:DesignInstance Type=vm:ExportDraftViewModel}"
-    mc:Ignorable="d"
-    d:DesignHeight="600" d:DesignWidth="400" d:Background="#FFF"
-    Title="LabelPrintPage">
+      xmlns:vm="clr-namespace:SGS.NR.AutoReport.Wpf.ViewModels"
+      d:DataContext="{d:DesignInstance Type=vm:ExportDraftViewModel}"
+      mc:Ignorable="d"
+      d:DesignHeight="600" d:DesignWidth="400" d:Background="#FFF"
+      Title="LabelPrintPage">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -23,25 +23,33 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Button
-            Content="Import Excel"
-            Grid.Row="0"
-            Grid.Column="0"
-            HorizontalAlignment="Left"
-            Margin="10"
-            Command="{Binding ImportExcelCommand}"
-            Style="{StaticResource MaterialDesignRaisedButton}"
-            ToolTip="匯入 Excel 電子表單"
-            materialDesign:ButtonAssist.CornerRadius="5"/>
+        <Button Grid.Row="0"
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                Margin="10"
+                Command="{Binding ImportExcelCommand}"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                ToolTip="匯入 Excel 電子表單"
+                materialDesign:ButtonAssist.CornerRadius="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="FileExcel"
+                         Width="20"
+                         Height="20"
+                         VerticalAlignment="Center"
+                         Margin="0,0,10,0"/>
+                    <TextBlock Text="Import"
+                          VerticalAlignment="Center"/>
+                </StackPanel>
+        </Button>
 
         <DataGrid ItemsSource="{Binding ExcelFiles}"
                   Grid.Row="1"
-                Grid.Column="0"
-                AutoGenerateColumns="False"
-                IsReadOnly="False"
-                CanUserAddRows="False"
-                SelectionMode="Single"
-                SelectionUnit="FullRow">
+                  Grid.Column="0"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="False"
+                  CanUserAddRows="False"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow">
             <DataGrid.Columns>
                 <!-- 勾選 -->
                 <DataGridTemplateColumn Width="Auto">
@@ -56,13 +64,14 @@
                 <!-- 檔案名稱 -->
                 <DataGridTextColumn Header="File Name"
                                     Binding="{Binding FileName}"
-            Width="*"/>
+                                    IsReadOnly="True"
+                                    Width="*"/>
 
                 <!-- 檔案路徑 -->
                 <DataGridTextColumn Header="File Path"
                                     Binding="{Binding FilePath}"
-            Width="2*"
-            Visibility="Hidden"/>
+                                    Width="2*"
+                                    Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -71,7 +80,7 @@
             Grid.Row="2"
             Width="Auto"
             Margin="10"
-                  ToolTip="選擇 Word 草稿範本"
+            ToolTip="選擇 Word 草稿範本"
             ItemsSource="{Binding DraftTempFiles}"
             SelectedItem="{Binding SelectedDraftTempFile, Mode=TwoWay}"
             DisplayMemberPath="FileName"
@@ -81,10 +90,9 @@
             HorizontalAlignment="Left"
             Grid.Row="3"
             Grid.Column="0"
-                    Visibility="Hidden"
+            Visibility="Hidden"
             Margin="10">
-            <ToggleButton
-                    Style="{StaticResource MaterialDesignSwitchToggleButton}"
+            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
                 ToolTip="是否加上簽名(預設無)">
             </ToggleButton>
             <TextBlock VerticalAlignment="Center"
@@ -98,27 +106,55 @@
                 Grid.Row="3"
                 Grid.Column="0"
                 Margin="10">
-            <Button
-            Content="Open"
-            Grid.Row="3"
-            Grid.Column="0"
-            HorizontalAlignment="Right"
-            Margin="5"
-                ToolTip="開啟匯出資料夾"
-            Command="{Binding OpenExportDirectoryCommand}"
-            Style="{StaticResource MaterialDesignRaisedLightButton}"
-            materialDesign:ButtonAssist.CornerRadius="5"/>
 
             <Button
-            Content="Export Word"
-            Grid.Row="3"
-            Grid.Column="0"
-            HorizontalAlignment="Right"
-            Margin="5"
+                Grid.Row="3"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                Margin="5"
+                ToolTip="開啟匯出資料夾"
+                Command="{Binding ClearDataGridCommand}"
+                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                materialDesign:ButtonAssist.CornerRadius="5">
+                            <materialDesign:PackIcon
+                    Kind="TrashCan"
+                    Width="{StaticResource IconSize}"
+                    Height="{StaticResource IconSize}"/>
+            </Button>
+
+            <Button
+                Grid.Row="3"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                Margin="5"
+                ToolTip="開啟匯出資料夾"
+                Command="{Binding OpenExportDirectoryCommand}"
+                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                materialDesign:ButtonAssist.CornerRadius="5">
+                <materialDesign:PackIcon
+                    Kind="FolderOpenOutline"
+                    Width="{StaticResource IconSize}"
+                    Height="{StaticResource IconSize}"/>
+            </Button>
+
+            <Button Grid.Row="3"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                Margin="5"
                 ToolTip="匯出 Word 草稿"
-            Command="{Binding ExportWordCommand}"
-            Style="{StaticResource MaterialDesignRaisedButton}"
-            materialDesign:ButtonAssist.CornerRadius="5"/>
+                Command="{Binding ExportWordCommand}"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                materialDesign:ButtonAssist.CornerRadius="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="FileWord"
+                         Width="20"
+                         Height="20"
+                         VerticalAlignment="Center"
+                         Margin="0,0,10,0"/>
+                    <TextBlock Text="Export"
+                        VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
 
         <ProgressBar Value="{Binding ProgressValue}"
