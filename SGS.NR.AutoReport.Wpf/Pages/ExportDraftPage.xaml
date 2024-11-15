@@ -112,7 +112,7 @@
                 Grid.Column="0"
                 HorizontalAlignment="Right"
                 Margin="5"
-                ToolTip="開啟匯出資料夾"
+                ToolTip="清除資料"
                 Command="{Binding ClearDataGridCommand}"
                 Style="{StaticResource MaterialDesignRaisedLightButton}"
                 materialDesign:ButtonAssist.CornerRadius="5">
