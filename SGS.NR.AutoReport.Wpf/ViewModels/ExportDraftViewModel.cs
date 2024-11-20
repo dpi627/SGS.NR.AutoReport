@@ -94,7 +94,7 @@ public partial class ExportDraftViewModel : ObservableObject
     {
         // 計算要處理的檔案總數
         var filesToProcess = ExcelFiles.Count(x => x.IsChecked);
-        
+
         if (!ExcelFiles.Any())
         {
             _dialog.ShowMessage("請先匯入檔案");
@@ -169,7 +169,7 @@ public partial class ExportDraftViewModel : ObservableObject
         if (draftInfo.TemplatePath.Contains("Draft.Container.Load.docx"))
         {
             var clInfo = _mapper.Map<ContainerLoadingInfo>(draftInfo);
-            _ = _serviceCL.GetDraft(clInfo);
+                _ = _serviceCL.GetDraft(clInfo);
         }
         else if (draftInfo.TemplatePath.Contains("Draft.Vessel.Load.docx"))
         {

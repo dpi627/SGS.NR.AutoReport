@@ -38,7 +38,7 @@ public class VesselLoadingService(
         try
         {
             // 載入範本
-            Document doc = new(info.TemplatePath);
+            Document? doc = new(info.TemplatePath);
 
             // 準備一次性資料
             var single = model.SingleData.ToDictionary();
@@ -51,7 +51,7 @@ public class VesselLoadingService(
             DataTable? tableTimeLog = model.CollectionData.TimeLogTable.ToDataTable();
             DataTable? tableInspection = model.CollectionData.InspectionTable.ToDataTable();
 
-            DataSet ds = new();
+            using DataSet ds = new();
             ds.Tables.Add(tableGoods);
             ds.Tables.Add(tableShip);
             ds.Tables.Add(tableTimeLog);
@@ -72,6 +72,7 @@ public class VesselLoadingService(
 
             // 保存結果文件
             doc.Save(info.TargetPath);
+            doc = null;
         }
         catch (Exception ex)
         {

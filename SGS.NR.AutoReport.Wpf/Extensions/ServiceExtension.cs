@@ -21,8 +21,8 @@ public static class ServiceExtension
     /// <returns>服務集合</returns>
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddSingleton<IContainerLoadingService, ContainerLoadingService>();
-        services.AddSingleton<IVesselLoadingService, VesselLoadingService>();
+        services.AddTransient<IContainerLoadingService, ContainerLoadingService>();
+        services.AddTransient<IVesselLoadingService, VesselLoadingService>();
         return services;
     }
 
@@ -33,8 +33,8 @@ public static class ServiceExtension
     /// <returns>服務集合</returns>
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddSingleton<IContainerLoadingRepository, ContainerLoadingRepository>();
-        services.AddSingleton<IVesselLoadingRepository, VesselLoadingRepository>();
+        services.AddTransient<IContainerLoadingRepository, ContainerLoadingRepository>();
+        services.AddTransient<IVesselLoadingRepository, VesselLoadingRepository>();
         return services;
     }
 
@@ -47,7 +47,7 @@ public static class ServiceExtension
     {
         var config = new TypeAdapterConfig();
         services.AddSingleton(config);
-        services.AddScoped<IMapper, Mapper>();
+        services.AddTransient<IMapper, Mapper>();
 
         return services;
     }
