@@ -15,10 +15,10 @@ public class ContainerLoadingRepository : BaseRepository, IContainerLoadingRepos
         "GOODS","DESCRIPTION","SHIPMENT","SHIPPER","BUYER","PACKING","MARKS",
         "TIME LOG","INSPECTION","QUANTITY","STOWAGE","REMARKS"
         ];
-    private readonly MainDataModel model = new();
 
     public MainDataModel Read(ContainerLoadingCondition condition)
     {
+        var model = new MainDataModel();
         // 取得 Excel
         _wb = new(condition.SourcePath);
         // 取得工作表
@@ -28,7 +28,7 @@ public class ContainerLoadingRepository : BaseRepository, IContainerLoadingRepos
         // 設定集合(迴圈)資料
         SetCollectionData(model.CollectionData);
         // 其他資料處理
-        OtherDataProcessing();
+        OtherDataProcessing(model);
 
         return model;
     }
@@ -201,7 +201,7 @@ public class ContainerLoadingRepository : BaseRepository, IContainerLoadingRepos
     /// <summary>
     /// 其他資料處理
     /// </summary>
-    public void OtherDataProcessing()
+    public void OtherDataProcessing(MainDataModel model)
     {
         // 如果 GoodsTable 有資料
         if (model.CollectionData.GoodsTable.Count != 0)

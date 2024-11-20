@@ -18,10 +18,10 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
         "SHIP'SPARTICULAR", "GENERAL", "HATCHCOVER", "CARGOHOLD", "GODOWN", "LOADING",
         "TIMELOG","INSPECTION","QUANTITYLOADED","STOWAGE","REMARKS"
         ];
-    private readonly MainDataModel model = new();
 
     public MainDataModel Read(VesselLoadingCondition condition)
     {
+        MainDataModel model = new();
         // 取得 Excel
         _wb = new(condition.SourcePath);
         // 取得工作表
@@ -31,7 +31,7 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
         // 設定集合(迴圈)資料
         SetCollectionData(model.CollectionData);
         // 其他資料處理
-        OtherDataProcessing();
+        OtherDataProcessing(model);
 
         return model;
     }
@@ -237,7 +237,7 @@ public class VesselLoadingRepository : BaseRepository, IVesselLoadingRepository
     /// <summary>
     /// 其他資料處理
     /// </summary>
-    public void OtherDataProcessing()
+    public void OtherDataProcessing(MainDataModel model)
     {
         // 如果 GoodsTable 有資料
         if (model.CollectionData.GoodsTable.Count != 0)

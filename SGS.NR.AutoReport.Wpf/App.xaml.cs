@@ -60,14 +60,14 @@ namespace SGS.NR.AutoReport.Wpf
 
                 // add view models
                 builder.Services.AddSingleton<MainWindowViewModel>();
-                builder.Services.AddSingleton<ExportDraftViewModel>();
+                builder.Services.AddTransient<ExportDraftViewModel>();
 
                 // add pages
                 builder.Services.AddSingleton(p => new MainWindow
                 {
                     DataContext = p.GetRequiredService<MainWindowViewModel>()
                 });
-                builder.Services.AddSingleton(p => new ExportDraftPage
+                builder.Services.AddTransient(p => new ExportDraftPage
                 {
                     DataContext = p.GetRequiredService<ExportDraftViewModel>()
                 });
