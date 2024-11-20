@@ -1,3 +1,3 @@
-﻿namespace SGS.NR.AutoReport.Wpf.Models;
+﻿namespace SGS.NR.AutoReport.Wpf.Messages;
 
 public record LoadingMessage(bool IsLoading);
