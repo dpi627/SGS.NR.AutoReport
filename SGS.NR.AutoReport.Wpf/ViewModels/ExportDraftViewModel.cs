@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using MapsterMapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
+using SGS.NR.AutoReport.Wpf.Messages;
 using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.AutoReport.Wpf.Services;
 using SGS.NR.Service.DTO.Info;
@@ -12,6 +13,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 
 namespace SGS.NR.AutoReport.Wpf.ViewModels;
 
@@ -59,6 +61,31 @@ public partial class ExportDraftViewModel : ObservableObject
 
         if (DraftTempFiles.Any())
             SelectedDraftTempFile = DraftTempFiles.First();
+
+        // 註冊接收器
+        _messenger.Register<FilesProcessedMessage>(this, (r, m) =>
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                RemoveProcessedFiles(m.ProcessedFiles);
+            });
+        });
+
+        _messenger.Register<ProgressMessage>(this, (r, m) =>
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ProgressValue = m.ProgressValue;
+            });
+        });
+    }
+
+    private void RemoveProcessedFiles(List<ExcelFile> processedFiles)
+    {
+        foreach (var file in processedFiles)
+        {
+            ExcelFiles.Remove(file);
+        }
     }
 
     [RelayCommand]
@@ -119,7 +146,11 @@ public partial class ExportDraftViewModel : ObservableObject
                 string targetFileName;
 
                 var currentFile = 0;
-                foreach (var excelFile in ExcelFiles)
+                // 收集已處理的檔案
+                var processedFiles = new List<ExcelFile>();
+                // 複製一份要處理的檔案清單，避免操作過程遭到修改
+                var files = ExcelFiles.ToList();
+                foreach (var excelFile in files)
                 {
                     if (!excelFile.IsChecked)
                         continue;
@@ -135,23 +166,31 @@ public partial class ExportDraftViewModel : ObservableObject
                     _logger.LogInformation("#{Seq} From {Excel} to {Word}", currentFile, draftInfo.SourcePath, draftInfo.TargetPath);
                     ExportDraft(draftInfo);
 
+                    // 加入已處理的檔案清單
+                    processedFiles.Add(excelFile);
+
                     // 更新進度
                     currentFile++;
                     ProgressValue = (double)currentFile / filesToProcess * 100;
+                    // 傳遞進度更新消息
+                    _messenger.Send(new ProgressMessage(ProgressValue));
                 }
+
+                // 傳遞已處理的檔案列表
+                _messenger.Send(new FilesProcessedMessage(processedFiles));
             });
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
-            throw;
+            _logger.LogError(ex, "匯出異常：{Message}", ex.Message);
+            _dialog.ShowMessage("匯出異常：" + ex.Message);
         }
         finally
         {
             ProgressValue = 100;
             _messenger.Send(new LoadingMessage(false));
             _dialog.ShowMessage("報告草稿製作完成");
-            await Task.Delay(1000);
+            //await Task.Delay(1000);
             IsExporting = false;
         }
     }
