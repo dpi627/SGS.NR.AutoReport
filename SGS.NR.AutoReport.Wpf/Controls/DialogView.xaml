@@ -56,7 +56,7 @@
                 FontSize="16"
                 Style="{StaticResource MaterialDesignFlatMidBgButton}"
                 Command="{Binding OkCommand}"
-                Width="{StaticResource ButtonWidth}"
+                Width="{StaticResource DialogButtonWidth}"
                 Visibility="{Binding IsOkButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
             <Button Content="{Binding CancelButtonText}"
@@ -64,7 +64,7 @@
                 Margin="10,0,0,0"
                 Style="{StaticResource MaterialDesignFlatMidBgButton}"
                 Command="{Binding CancelCommand}"
-                Width="{StaticResource ButtonWidth}"
+                Width="{StaticResource DialogButtonWidth}"
                 Visibility="{Binding IsCancelButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </StackPanel>
 

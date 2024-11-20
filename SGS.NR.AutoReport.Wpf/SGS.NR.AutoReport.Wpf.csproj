@@ -6,14 +6,30 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>icon-cer.ico</ApplicationIcon>
+    <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="icon-cer.ico" />
+    <None Remove="Templates\Draft.Container.Load.docx" />
+    <None Remove="Templates\Draft.Vessel.Load.docx" />
+    <None Remove="Templates\Draft.Vessel.Unload.02006.docx" />
+    <None Remove="Templates\Draft.Vessel.Unload.24301715.docx" />
+    <None Remove="Templates\Draft.Vessel.Unload.24304166.docx" />
+    <None Remove="Templates\Draft.Vessel.Unload.24305257.docx" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icon-cer.ico" />
+    <Content Include="Templates\Draft.Container.Load.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Draft.Vessel.Load.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -21,7 +37,7 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
     <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
     <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
@@ -29,7 +45,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SGS.NR.Util\SGS.NR.Util.csproj" />
+    <ProjectReference Include="..\SGS.NR.Service\SGS.NR.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icon-cer.ico" />
   </ItemGroup>
 
 </Project>

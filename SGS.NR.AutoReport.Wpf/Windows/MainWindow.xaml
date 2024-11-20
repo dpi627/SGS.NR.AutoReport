@@ -42,7 +42,7 @@
                         <Button FontSize="16"
                                 Height="60"
                                 Style="{StaticResource MaterialDesignFlatButton}"
-                                Command="{Binding NavigateToExportDraftAsyncCommand}"
+                                Command="{Binding NavigateToExportDraftCommand}"
                                 HorizontalContentAlignment="Left"
                                 Width="Auto">
                             <StackPanel Orientation="Horizontal">
@@ -57,6 +57,7 @@
                         </Button>
                         <Button FontSize="16"
                                 Height="50"
+                                Visibility="Hidden"
                                 Style="{StaticResource MaterialDesignFlatButton}"
                                 Command="{Binding NavigateToExcelConfigAsyncCommand}"
                                 HorizontalContentAlignment="Left">
@@ -87,7 +88,7 @@
                          IsIndeterminate="True"
                          Width="50"
                          Height="50"/>
-                            <TextBlock Text="Loading..."
+                            <TextBlock Text="Processing..."
                        HorizontalAlignment="Center"
                        Margin="0,8,0,0"/>
                         </StackPanel>
