@@ -11,6 +11,8 @@ using SGS.NR.Service.DTO.Info;
 using SGS.NR.Service.Interface;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -41,6 +43,34 @@ public partial class ExportDraftViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _isExporting;
+
+    private bool _isUpdatingAllSelected = false;
+
+    [ObservableProperty]
+    private bool? _allSelected = false;
+
+    partial void OnAllSelectedChanged(bool? value)
+    {
+        if (_isUpdatingAllSelected)
+            return;
+
+        _isUpdatingAllSelected = true;
+
+        try
+        {
+            if (value == true || value == false)
+            {
+                foreach (var item in ExcelFiles)
+                {
+                    item.IsChecked = value.Value;
+                }
+            }
+        }
+        finally
+        {
+            _isUpdatingAllSelected = false;
+        }
+    }
 
     public ExportDraftViewModel(
         IContainerLoadingService serviceCL,
@@ -78,6 +108,29 @@ public partial class ExportDraftViewModel : ObservableObject
                 ProgressValue = m.ProgressValue;
             });
         });
+
+        ExcelFiles.CollectionChanged += ExcelFiles_CollectionChanged;
+    }
+
+    private void ExcelFiles_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.NewItems != null)
+        {
+            foreach (ExcelFile item in e.NewItems)
+            {
+                item.PropertyChanged += ExcelFile_PropertyChanged;
+            }
+        }
+
+        if (e.OldItems != null)
+        {
+            foreach (ExcelFile item in e.OldItems)
+            {
+                item.PropertyChanged -= ExcelFile_PropertyChanged;
+            }
+        }
+
+        UpdateAllSelected();
     }
 
     private void RemoveProcessedFiles(List<ExcelFile> processedFiles)
@@ -86,7 +139,30 @@ public partial class ExportDraftViewModel : ObservableObject
         {
             ExcelFiles.Remove(file);
         }
+        UpdateAllSelected();
     }
+    private void UpdateAllSelected()
+    {
+        if (!ExcelFiles.Any())
+        {
+            AllSelected = false;
+            return;
+        }
+
+        if (ExcelFiles.All(f => f.IsChecked))
+        {
+            AllSelected = true;
+        }
+        else if (ExcelFiles.All(f => !f.IsChecked))
+        {
+            AllSelected = false;
+        }
+        else
+        {
+            AllSelected = null;
+        }
+    }
+
 
     [RelayCommand]
     private void ImportExcel()
@@ -106,14 +182,28 @@ public partial class ExportDraftViewModel : ObservableObject
         var files = openFileDialog.FileNames;
         foreach (var file in files)
         {
-            ExcelFiles.Add(new ExcelFile
+            var excelFile = new ExcelFile
             {
                 FileName = Path.GetFileName(file),
                 FilePath = file,
                 IsChecked = true
-            });
+            };
+
+            // 订阅 PropertyChanged 事件
+            excelFile.PropertyChanged += ExcelFile_PropertyChanged;
+
+            ExcelFiles.Add(excelFile);
         }
+        UpdateAllSelected();
         _logger.LogInformation("Import Excel: {@Excels}", ExcelFiles);
+    }
+
+    private void ExcelFile_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ExcelFile.IsChecked))
+        {
+            UpdateAllSelected();
+        }
     }
 
     [RelayCommand]
@@ -272,6 +362,7 @@ public partial class ExportDraftViewModel : ObservableObject
     [RelayCommand]
     private void ClearDataGrid()
     {
+        UpdateAllSelected();
         ExcelFiles.Clear();
     }
 }
