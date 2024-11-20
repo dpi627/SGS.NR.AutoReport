@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:SGS.NR.AutoReport.Wpf.Pages"
+      xmlns:c="clr-namespace:SGS.NR.AutoReport.Wpf.Controls"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:vm="clr-namespace:SGS.NR.AutoReport.Wpf.ViewModels"
       d:DataContext="{d:DesignInstance Type=vm:ExportDraftViewModel}"
@@ -53,6 +54,15 @@
             <DataGrid.Columns>
                 <!-- 勾選 -->
                 <DataGridTemplateColumn Width="Auto">
+                    <!-- header checkbox -->
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <c:CustomThreeStateCheckBox IsChecked="{Binding DataContext.AllSelected, RelativeSource={RelativeSource AncestorType=DataGrid}, Mode=TwoWay}"
+                                      IsThreeState="True"
+                                      Style="{StaticResource MaterialDesignCheckBox}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <!-- single row checkbox -->
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
