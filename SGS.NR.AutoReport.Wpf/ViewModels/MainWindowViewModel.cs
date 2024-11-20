@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Options;
+using SGS.NR.AutoReport.Wpf.Messages;
 using SGS.NR.AutoReport.Wpf.Models;
 using SGS.NR.AutoReport.Wpf.Services;
 using SGS.NR.Util.Helper;
